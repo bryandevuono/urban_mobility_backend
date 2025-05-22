@@ -1,3 +1,4 @@
+import sqlite3
 def authenticate_user(username, password):
     #validate input (required, length format)
     #hard-coded
