@@ -17,3 +17,6 @@ def menu():
     print("13: Update the information of a scooter")
     print("14: Delete a scooter from the backend system")
     print("15: Search and retrieve the information of a Traveller")
+
+def add_scooter():
+    print("Enter the scooter info:")

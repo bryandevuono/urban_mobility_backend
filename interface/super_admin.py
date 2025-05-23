@@ -17,6 +17,11 @@ def menu():
     print("22: Generate a restore-code for a System Administrator and backup")
     print("23: Revoke a previously generated restore-code")
     print("0: Exit")
+    print("Please select an option (0-23):")
+
+    options = {
+        12: ""
+    }
 
     while True:
         choice = input("Please enter your choice: ")
