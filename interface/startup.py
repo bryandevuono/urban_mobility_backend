@@ -17,12 +17,15 @@ def welcome_screen():
         if (login_option.lower() == "l" and len(login_option) < 2):
             clear()
             login_screen()
+            break
         if (login_option.lower() == "r" and len(login_option) < 2):
             clear()
             signup_screen()
+            break
         else:
             clear()
             print("Wrong key, please try again")
+            continue
 
 def login_screen():
     while True:
