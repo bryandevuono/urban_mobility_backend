@@ -1,24 +1,28 @@
 import os
 import sys
-
-sys.path.insert(0, '../auth')
+from super_admin import menu as super_admin_menu
+sys.path.insert(0, './auth')
 
 from login import authenticate_user 
 
 clear = lambda: os.system('clear')
 
 def welcome_screen():
-    print("Welcome to the urban mobility system\n"
+    while True:
+        print("Welcome to the urban mobility system\n"
            "Choose an option:\n"
            "\nLogin (enter L)\n"
            "Register (enter R)")
-    login_option = input()
-
-    if (login_option.lower() == "l" and len(login_option) < 2):
-        clear()
-        login_screen()
-    else:
-        print("Wrong key, please try again")
+        login_option = input()
+        if (login_option.lower() == "l" and len(login_option) < 2):
+            clear()
+            login_screen()
+        if (login_option.lower() == "r" and len(login_option) < 2):
+            clear()
+            signup_screen()
+        else:
+            clear()
+            print("Wrong key, please try again")
 
 def login_screen():
     while True:
@@ -26,9 +30,13 @@ def login_screen():
         password = input("Enter your password\n")
         login_attempt = authenticate_user(username, password)
         if login_attempt:
-            print("logged in")
+            # TODO: determine role
+            clear()
+            super_admin_menu()
             break
         else:
+            clear()
+            print("Wrong login credentials\n")
             continue
             
 def signup_screen():
@@ -37,4 +45,5 @@ def signup_screen():
         password = input("Enter your password\n")
         firstname = input("Enter your password\n")
         lastname = input("Enter your password\n")
+
 welcome_screen()

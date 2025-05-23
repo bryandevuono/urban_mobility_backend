@@ -5,5 +5,5 @@ def authenticate_user(username, password):
     if username == "super_admin" and password == "Admin123?":
         return True
     #check if username exists
-
+    return False
     #check password
