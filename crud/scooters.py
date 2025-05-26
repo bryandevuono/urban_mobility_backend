@@ -56,7 +56,7 @@ def update_scooter_info( serial_number, brand, model, top_speed, battery_capacit
     conn.close()
     return True
 
-def delete_scooter(serial_number) -> bool:
+def delete_scooter_info(serial_number) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 

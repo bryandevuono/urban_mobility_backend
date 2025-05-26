@@ -1,5 +1,7 @@
 from service_engineer import menu as service_engineer_menu
-from system_admin import menu as system_admin_menu, add_scooter, update_scooter
+from system_admin import menu as system_admin_menu, add_scooter, update_scooter, delete_scooter
+import os
+clear = lambda: os.system('cls')
 
 def menu():
     print("Welcome to the Backend System, super admin!")
@@ -21,7 +23,8 @@ def menu():
 
     options = {
         "12": add_scooter,
-        "13": update_scooter
+        "13": update_scooter,
+        "14": delete_scooter
     }
 
     while True:
