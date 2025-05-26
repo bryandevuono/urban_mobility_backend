@@ -1,4 +1,13 @@
 from service_engineer import menu as service_engineer_menu
+import os
+import sys
+sys.path.insert(0, '../crud')
+
+from scooters import add_scooter_info, update_scooter_info
+
+# TODO: add validation for inputs
+clear = lambda: os.system('cls')
+
 def menu():
     print("Welcome to the Backend System, System Admin!")
     #service_engineer_menu
@@ -20,3 +29,48 @@ def menu():
 
 def add_scooter():
     print("Enter the scooter info:")
+    brand = input("Brand: ")
+    model = input("Model: ")
+    serial_number = input("Serial Number: ")
+    top_speed = float(input("Top Speed (km/h): "))
+    battery_capacity = int(input("Battery Capacity (mAh): "))
+    soc = int(input("State of Charge (%): "))
+    target_range_soc_min = int(input("Target Range SOC Min (%): "))
+    target_range_soc_max = int(input("Target Range SOC Max (%): "))
+    latitude = float(input("Latitude: "))
+    longitude = float(input("Longitude: "))
+    out_of_service = int(input("Out of Service (0 for No, 1 for Yes): "))
+    mileage = float(input("Mileage (km): "))
+    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
+
+    add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc_min,
+                    target_range_soc_max, latitude, longitude, out_of_service, mileage, last_maintenance_date)
+    
+def update_scooter():
+    print("Enter the scooter serial number to update:")
+    serial_number = input("Serial Number: ")
+    
+    brand = input("Brand (leave blank to keep current): ")
+    model = input("Model (leave blank to keep current): ")
+    top_speed = input("Top Speed (km/h, leave blank to keep current): ")
+    battery_capacity = input("Battery Capacity (mAh, leave blank to keep current): ")
+    soc = input("State of Charge (%), leave blank to keep current: ")
+    target_range_soc_min = input("Target Range SOC Min (%), leave blank to keep current: ")
+    target_range_soc_max = input("Target Range SOC Max (%), leave blank to keep current: ")
+    latitude = input("Latitude (leave blank to keep current): ")
+    longitude = input("Longitude (leave blank to keep current): ")
+    out_of_service = input("Out of Service (0 for No, 1 for Yes, leave blank to keep current): ")
+    mileage = input("Mileage (km, leave blank to keep current): ")
+    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD, leave blank to keep current): ")
+
+    update_scooter_info(serial_number, brand, model, 
+                   float(top_speed),
+                   int(battery_capacity),
+                   int(soc),
+                   int(target_range_soc_min),
+                   int(target_range_soc_max),
+                   float(latitude),
+                   float(longitude),
+                   int(out_of_service),
+                   float(mileage),
+                   last_maintenance_date)

@@ -1,12 +1,11 @@
 import sqlite3
 
-def add_scooter(brand, model, serial_number, top_speed,battery_capacity, soc, target_range_soc_min, target_range_soc_max,
+def add_scooter_info(brand, model, serial_number, top_speed,battery_capacity, soc, target_range_soc_min, target_range_soc_max,
                 latitute, longitude, out_of_service, mileage, last_maintenance_date) -> bool:
     
-    conn = sqlite3.connect('./database/urban_mobility.db')
+    conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
-    # Insert the new scooter into the database
     cursor.execute('''
         INSERT INTO scooter_data (
             brand, model, serial_number, top_speed, battery_capacity, state_of_charge,
@@ -22,7 +21,37 @@ def add_scooter(brand, model, serial_number, top_speed,battery_capacity, soc, ta
     conn.close()
 
     print("Scooter added successfully!")
+    return True
 
-add_scooter(
-    "Xiaomi", "M365", "SN123456dsdsad", 25, 7800, 90, 20, 80, 52.5200, 13.4050, 0, 1200, "2024-06-01"
-)
+def update_scooter_info( serial_number, brand, model, top_speed, battery_capacity, soc,
+                   target_range_soc_min, target_range_soc_max, latitude, longitude,
+                   out_of_service, mileage, last_maintenance_date) -> bool:
+    
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE scooter_data
+        SET brand = ?,
+            model = ?,
+            top_speed = ?,
+            battery_capacity = ?,
+            state_of_charge = ?,
+            target_range_soc_min = ?,
+            target_range_soc_max = ?,
+            latitude = ?,
+            longitude = ?,
+            out_of_service = ?,
+            mileage = ?,
+            last_maintenance_date = ?
+        WHERE serial_number = ?
+    ''', (brand, model, top_speed, battery_capacity, soc, target_range_soc_min, target_range_soc_max,
+          latitude, longitude, out_of_service, mileage, last_maintenance_date, serial_number))
+    conn.commit()
+    if cursor.rowcount == 0:
+        print("No scooter found with the given serial number.")
+        conn.close()
+        return False
+    print("Scooter updated successfully!")
+    conn.close()
+    return True

@@ -1,11 +1,11 @@
 import os
 import sys
 from super_admin import menu as super_admin_menu
-sys.path.insert(0, './auth')
+sys.path.insert(0, '../auth')
 
 from login import authenticate_user 
 
-clear = lambda: os.system('clear')
+clear = lambda: os.system('cls')
 
 def welcome_screen():
     while True:

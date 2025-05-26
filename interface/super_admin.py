@@ -1,5 +1,5 @@
 from service_engineer import menu as service_engineer_menu
-from system_admin import menu as system_admin_menu
+from system_admin import menu as system_admin_menu, add_scooter, update_scooter
 
 def menu():
     print("Welcome to the Backend System, super admin!")
@@ -20,7 +20,8 @@ def menu():
     print("Please select an option (0-23):")
 
     options = {
-        12: ""
+        "12": add_scooter,
+        "13": update_scooter
     }
 
     while True:
@@ -30,5 +31,6 @@ def menu():
             break
         elif choice in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15","16", "17", "18", "19", "20", "21", "22", "23"]:
             print(f"You selected option {choice}.")
+            options[choice]()
         else:
             print("Invalid choice. Please try again.")
