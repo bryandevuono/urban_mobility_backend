@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info
+from scooters import delete_scooter_info
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
@@ -46,6 +47,8 @@ def add_scooter():
     add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc_min,
                     target_range_soc_max, latitude, longitude, out_of_service, mileage, last_maintenance_date)
     
+    print("Scooter added successfully!")
+    
 def update_scooter():
     print("Enter the scooter serial number to update:")
     serial_number = input("Serial Number: ")
@@ -74,3 +77,16 @@ def update_scooter():
                    int(out_of_service),
                    float(mileage),
                    last_maintenance_date)
+    
+    print("Scooter updated successfully!")
+
+def delete_scooter():
+    print("Enter the scooter serial number to delete:")
+    serial_number = input("Serial Number: ")
+
+    confirmation = input(f"Are you sure you want to delete the scooter with Serial Number {serial_number}? (yes/no): ").strip().lower()
+    if confirmation == 'yes':
+        delete_scooter_info(serial_number)
+        print("Scooter deleted successfully!")
+    else:
+        print("Operation cancelled.")

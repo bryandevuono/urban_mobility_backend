@@ -1,5 +1,7 @@
 import sqlite3
 
+errors = []
+
 def add_scooter_info(brand, model, serial_number, top_speed,battery_capacity, soc, target_range_soc_min, target_range_soc_max,
                 latitute, longitude, out_of_service, mileage, last_maintenance_date) -> bool:
     
@@ -20,7 +22,6 @@ def add_scooter_info(brand, model, serial_number, top_speed,battery_capacity, so
     conn.commit()
     conn.close()
 
-    print("Scooter added successfully!")
     return True
 
 def update_scooter_info( serial_number, brand, model, top_speed, battery_capacity, soc,
@@ -49,9 +50,24 @@ def update_scooter_info( serial_number, brand, model, top_speed, battery_capacit
           latitude, longitude, out_of_service, mileage, last_maintenance_date, serial_number))
     conn.commit()
     if cursor.rowcount == 0:
-        print("No scooter found with the given serial number.")
+        errors.append("No scooter found with the given serial number.")
         conn.close()
         return False
-    print("Scooter updated successfully!")
+    conn.close()
+    return True
+
+def delete_scooter(serial_number) -> bool:
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        DELETE FROM scooter_data
+        WHERE serial_number = ?
+    ''', (serial_number,))
+    conn.commit()
+    if cursor.rowcount == 0:
+        errors.append("No scooter found with the given serial number.")
+        conn.close()
+        return False
     conn.close()
     return True
