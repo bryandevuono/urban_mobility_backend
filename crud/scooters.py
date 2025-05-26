@@ -71,3 +71,20 @@ def delete_scooter_info(serial_number) -> bool:
         return False
     conn.close()
     return True
+
+def read_scooter_info():
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT * FROM scooter_data
+    ''')
+    scooters = cursor.fetchall()
+    
+    conn.close()
+    
+    if not scooters:
+        errors.append("No scooters found in the database.")
+        return []
+    
+    return scooters
