@@ -9,6 +9,7 @@ from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, 
 clear = lambda: os.system('cls')
 
 def menu():
+    clear()
     print("Welcome to the Backend System, System Admin!")
     #service_engineer_menu
     service_engineer_menu()
@@ -28,6 +29,7 @@ def menu():
     print("15: Search and retrieve the information of a Traveller")
 
 def add_scooter():
+    clear()
     print("Enter the scooter info:")
     brand = input("Brand: ")
     model = input("Model: ")
@@ -49,6 +51,7 @@ def add_scooter():
     print("Scooter added successfully!")
     
 def update_scooter():
+    clear()
     print("Enter the scooter serial number to update:")
     serial_number = input("Serial Number: ")
     
@@ -80,6 +83,7 @@ def update_scooter():
     print("Scooter updated successfully!")
 
 def delete_scooter():
+    clear()
     print("Enter the scooter serial number to delete:")
     serial_number = input("Serial Number: ")
 
@@ -89,3 +93,7 @@ def delete_scooter():
         print("Scooter deleted successfully!")
     else:
         print("Operation cancelled.")
+
+def add_service_engineer():
+    clear()
+    
