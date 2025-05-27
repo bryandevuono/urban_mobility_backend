@@ -72,19 +72,34 @@ def delete_scooter_info(serial_number) -> bool:
     conn.close()
     return True
 
-def read_scooter_info():
+def read_scooter_info(search_param):
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
-    cursor.execute('''
+    query = '''
         SELECT * FROM scooter_data
-    ''')
+        WHERE brand LIKE ?
+        OR model LIKE ?
+        OR serial_number LIKE ?
+        OR top_speed LIKE ?
+        OR battery_capacity LIKE ?
+        OR state_of_charge LIKE ?
+        OR target_range_soc_min LIKE ?
+        OR target_range_soc_max LIKE ?
+        OR latitude LIKE ?
+        OR longitude LIKE ?
+        OR out_of_service LIKE ?
+        OR mileage LIKE ?
+        OR last_maintenance_date LIKE ?
+    '''
+    search_term = f"%{search_param}%"
+    cursor.execute(query, [search_term] * 13)
     scooters = cursor.fetchall()
     
     conn.close()
     
     if not scooters:
-        errors.append("No scooters found in the database.")
+        errors.append("No scooters found matching the search parameter.")
         return []
     
     return scooters

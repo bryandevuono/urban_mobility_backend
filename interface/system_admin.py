@@ -3,8 +3,7 @@ import os
 import sys
 sys.path.insert(0, '../crud')
 
-from scooters import add_scooter_info, update_scooter_info
-from scooters import delete_scooter_info
+from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
