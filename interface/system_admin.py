@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
-from users import create_user, read_users
+from users import create_user, read_users, delete_user
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
@@ -112,3 +112,9 @@ def display_users():
     print("id", "username", "firstname", "role", "lastname", "created_date")
     for user in users:
         print(user)
+
+def delete_service_engineer():
+    clear()
+    print("Enter the username of the service engineer you want to delete:")
+    username = input()
+    delete_user(username, "service_engineer")

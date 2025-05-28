@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../auth')
 from hash import hash_password
 
-def create_user(username, password, firstname, lastname, role):
+def create_user(username, password, firstname, lastname, role) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     
@@ -23,7 +23,7 @@ def create_user(username, password, firstname, lastname, role):
 
     return True
 
-def read_users():
+def read_users() -> list:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -37,14 +37,14 @@ def read_users():
     
     return users
 
-def delete_user(username):
+def delete_user(username, role) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
     cursor.execute('''
         DELETE FROM users
-        WHERE username = ?
-    ''', (username,))
+        WHERE username = ? AND role = ?
+    ''', (username, role))
 
     conn.commit()
     conn.close()

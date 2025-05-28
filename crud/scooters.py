@@ -72,7 +72,7 @@ def delete_scooter_info(serial_number) -> bool:
     conn.close()
     return True
 
-def read_scooter_info(search_param):
+def read_scooter_info(search_param) -> list:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
