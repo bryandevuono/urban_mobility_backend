@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
-from users import create_user
+from users import create_user, read_users
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
@@ -104,3 +104,11 @@ def add_service_engineer():
     first_name = input("first_name:")
     last_name = input("last_name:")
     create_user(username, password, role, first_name, last_name)
+
+def display_users():
+    clear()
+    print("Users:")
+    users = read_users()
+    print("id", "username", "firstname", "role", "lastname", "created_date")
+    for user in users:
+        print(user)

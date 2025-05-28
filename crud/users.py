@@ -22,3 +22,31 @@ def create_user(username, password, firstname, lastname, role):
     conn.close()
 
     return True
+
+def read_users():
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    query = '''
+        SELECT * FROM users
+    '''
+    cursor.execute(query)
+    users = cursor.fetchall()
+    
+    conn.close()
+    
+    return users
+
+def delete_user(username):
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        DELETE FROM users
+        WHERE username = ?
+    ''', (username,))
+
+    conn.commit()
+    conn.close()
+
+    return True
