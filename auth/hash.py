@@ -6,4 +6,5 @@ def hash_password(password):
     return hashed_password
 
 def check_password(password, stored_hash):
+    # stored_hash is from the db
     return bcrypt.checkpw(password.encode('utf-8'), stored_hash)

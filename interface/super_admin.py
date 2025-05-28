@@ -1,6 +1,7 @@
 from service_engineer import menu as service_engineer_menu, search_scooter
-from system_admin import menu as system_admin_menu, add_scooter, update_scooter, delete_scooter
+from system_admin import menu as system_admin_menu, add_scooter, update_scooter, delete_scooter,add_service_engineer
 import os
+
 clear = lambda: os.system('cls')
 
 def menu():
@@ -23,6 +24,7 @@ def menu():
 
     options = {
         "2": search_scooter,
+        "4": add_service_engineer,
         "12": add_scooter,
         "13": update_scooter,
         "14": delete_scooter
