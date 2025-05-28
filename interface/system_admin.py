@@ -38,16 +38,14 @@ def add_scooter():
     top_speed = float(input("Top Speed (km/h): "))
     battery_capacity = int(input("Battery Capacity (mAh): "))
     soc = int(input("State of Charge (%): "))
-    target_range_soc_min = int(input("Target Range SOC Min (%): "))
-    target_range_soc_max = int(input("Target Range SOC Max (%): "))
-    latitude = float(input("Latitude: "))
-    longitude = float(input("Longitude: "))
+    target_range_soc = int(input("Target Range SOC Min (%): "))
+    location = float(input("location: "))
     out_of_service = int(input("Out of Service (0 for No, 1 for Yes): "))
     mileage = float(input("Mileage (km): "))
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
 
-    add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc_min,
-                    target_range_soc_max, latitude, longitude, out_of_service, mileage, last_maintenance_date)
+    add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc,
+                    location, out_of_service, mileage, last_maintenance_date)
     
     print("Scooter added successfully!")
     
@@ -61,25 +59,23 @@ def update_scooter():
     top_speed = input("Top Speed (km/h, leave blank to keep current): ")
     battery_capacity = input("Battery Capacity (mAh, leave blank to keep current): ")
     soc = input("State of Charge (%), leave blank to keep current: ")
-    target_range_soc_min = input("Target Range SOC Min (%), leave blank to keep current: ")
-    target_range_soc_max = input("Target Range SOC Max (%), leave blank to keep current: ")
-    latitude = input("Latitude (leave blank to keep current): ")
-    longitude = input("Longitude (leave blank to keep current): ")
+    target_range_soc = input("Target Range SOC (%), leave blank to keep current: ")
+    location = input("Location, leave blank to keep current:")
     out_of_service = input("Out of Service (0 for No, 1 for Yes, leave blank to keep current): ")
     mileage = input("Mileage (km, leave blank to keep current): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD, leave blank to keep current): ")
 
-    update_scooter_info(serial_number, brand, model, 
-                   float(top_speed),
-                   int(battery_capacity),
-                   int(soc),
-                   int(target_range_soc_min),
-                   int(target_range_soc_max),
-                   float(latitude),
-                   float(longitude),
-                   int(out_of_service),
-                   float(mileage),
-                   last_maintenance_date)
+    update_scooter_info(serial_number, 
+                        brand, 
+                        model, 
+                        top_speed,
+                        battery_capacity,
+                        soc,
+                        target_range_soc,
+                        location,
+                        out_of_service,
+                        mileage,
+                        last_maintenance_date)
     
     print("Scooter updated successfully!")
 

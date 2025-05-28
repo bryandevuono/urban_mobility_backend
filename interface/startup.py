@@ -50,3 +50,10 @@ def signup_screen():
         lastname = input("Enter your password\n")
 
 welcome_screen()
+
+# if check_password(entered_pw, user_hashed_pw):
+#     print("Welcome, admin!")
+#     role = get_user_role(username)
+#     load_menu(role)
+# else:
+#     log_failed_login(username)

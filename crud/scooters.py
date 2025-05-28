@@ -2,8 +2,8 @@ import sqlite3
 
 errors = []
 
-def add_scooter_info(brand, model, serial_number, top_speed,battery_capacity, soc, target_range_soc_min, target_range_soc_max,
-                    latitute, longitude, out_of_service, mileage, last_maintenance_date) -> bool:
+def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc,
+                    location, out_of_service, mileage, last_maintenance_date) -> bool:
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
@@ -11,26 +11,23 @@ def add_scooter_info(brand, model, serial_number, top_speed,battery_capacity, so
     cursor.execute('''
         INSERT INTO scooter_data (
             brand, model, serial_number, top_speed, battery_capacity, state_of_charge,
-            target_range_soc_min, target_range_soc_max, latitude, longitude,
+            target_range_soc, location,
             out_of_service, mileage, last_maintenance_date
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (brand,model,serial_number,top_speed,battery_capacity,soc,target_range_soc_min,target_range_soc_max,latitute,
-              longitude,out_of_service,mileage,last_maintenance_date
-    ))
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (brand,model,serial_number,top_speed,battery_capacity,soc,target_range_soc,location,out_of_service,mileage,last_maintenance_date)
+        )
 
     conn.commit()
     conn.close()
 
     return True
 
-def update_scooter_info(serial_number, brand, model, top_speed, battery_capacity, soc,
-                        target_range_soc_min, target_range_soc_max, latitude, longitude,
-                        out_of_service, mileage, last_maintenance_date) -> bool:
+def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,soc,target_range_soc,
+                        location,out_of_service,mileage,last_maintenance_date) -> bool:
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-
     cursor.execute('''
         UPDATE scooter_data
         SET brand = ?,
@@ -38,18 +35,17 @@ def update_scooter_info(serial_number, brand, model, top_speed, battery_capacity
             top_speed = ?,
             battery_capacity = ?,
             state_of_charge = ?,
-            target_range_soc_min = ?,
-            target_range_soc_max = ?,
-            latitude = ?,
-            longitude = ?,
+            target_range_soc = ?,
+            location = ?,
             out_of_service = ?,
             mileage = ?,
             last_maintenance_date = ?
         WHERE serial_number = ?
-    ''', (brand, model, top_speed, battery_capacity, soc, target_range_soc_min, target_range_soc_max,
-          latitude, longitude, out_of_service, mileage, last_maintenance_date, serial_number))
+    ''', (brand, model, top_speed, battery_capacity, soc, target_range_soc,
+        location, out_of_service, mileage, last_maintenance_date, serial_number))
     conn.commit()
     if cursor.rowcount == 0:
+        print(f"Debug: No rows updated. Check if serial_number '{serial_number}' exists in the database.")
         errors.append("No scooter found with the given serial number.")
         conn.close()
         return False
@@ -84,10 +80,8 @@ def read_scooter_info(search_param) -> list:
         OR top_speed LIKE ?
         OR battery_capacity LIKE ?
         OR state_of_charge LIKE ?
-        OR target_range_soc_min LIKE ?
-        OR target_range_soc_max LIKE ?
-        OR latitude LIKE ?
-        OR longitude LIKE ?
+        OR target_range_soc LIKE ?
+        OR location LIKE ?
         OR out_of_service LIKE ?
         OR mileage LIKE ?
         OR last_maintenance_date LIKE ?

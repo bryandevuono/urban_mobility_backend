@@ -1,6 +1,12 @@
 from service_engineer import menu as service_engineer_menu, search_scooter
-from system_admin import menu as system_admin_menu, add_scooter, update_scooter, delete_scooter,add_service_engineer, display_users, delete_service_engineer
+from system_admin import menu as system_admin_menu
+from system_admin import *
 import os
+sys.path.insert(0, '../')
+from constants import *
+import sys
+sys.path.insert(0, '../crud')
+from users import *
 
 clear = lambda: os.system('cls')
 
@@ -29,7 +35,9 @@ def menu():
         "6": delete_service_engineer,
         "12": add_scooter,
         "13": update_scooter,
-        "14": delete_scooter
+        "14": delete_scooter,
+        "16": add_system_admin,
+        "18": delete_system_admin
     }
 
     while True:
@@ -42,3 +50,19 @@ def menu():
             options[choice]()
         else:
             print("Invalid choice. Please try again.")
+
+def add_system_admin():
+    clear()
+    print("Enter the info of the new system admin")
+    username = input("username:")
+    password = input("password:")
+    firstname = input("firstname:")
+    lastname = input("lastname:")
+    role = SYSTEM_ADMIN
+    create_user(username, password, firstname, lastname, role)
+
+def delete_system_admin():
+    clear()
+    print("Give the username of the user you want to delete:")
+    username = input("username:")
+    delete_user(username, SYSTEM_ADMIN)
