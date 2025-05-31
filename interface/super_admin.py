@@ -33,9 +33,12 @@ def menu():
         "3": display_users,
         "4": add_service_engineer,
         "6": delete_service_engineer,
+        "9": add_traveller,
+        "11": delete_traveller,
         "12": add_scooter,
         "13": update_scooter,
         "14": delete_scooter,
+        "15": search_traveller,
         "16": add_system_admin,
         "18": delete_system_admin
     }

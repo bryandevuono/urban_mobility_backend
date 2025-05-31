@@ -5,6 +5,7 @@ sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
 from users import create_user, read_users, delete_user
+from travellers import *
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
@@ -114,3 +115,36 @@ def delete_service_engineer():
     print("Enter the username of the service engineer you want to delete:")
     username = input()
     delete_user(username, "service_engineer")
+
+def add_traveller():
+    clear()
+    print("Enter the info of the new traveller:")
+    first_name = input("firstname:")
+    last_name = input("lastname:")
+    birth_date = input("birth_date (YYYY-MM-DD):")
+    email = input("email:")
+    phone_number = input("phone_number:")
+    gender = input("Gender (M/F):")
+    streetname = input("Street Name:")
+    house_number = input("Street Number:")
+    zip_code = input("Zip Code:")
+    city = input("City:")
+    driving_license_number = input("Driving License Number:")
+    create_traveller(first_name, last_name, birth_date, email, phone_number, gender, streetname, 
+                house_number, zip_code, city, driving_license_number)
+
+def delete_traveller():
+    clear()
+    print("Enter the email of the traveller you want to delete:")
+    email = input()
+    remove_traveller(email)
+
+def search_traveller():
+    clear()
+    print("Enter the info of the traveller you want to search:")
+    search_param = input()
+    traveller = read_traveller(search_param)
+    if traveller:
+        print("Traveller found:", traveller)
+    else:
+        print("Traveller not found.")
