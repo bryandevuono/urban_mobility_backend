@@ -17,8 +17,6 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
     conn.close()
 
     return True
-    # Example function call
-    # Replace the arguments with actual values as needed
 
 def remove_traveller(traveller_email) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
@@ -62,3 +60,28 @@ def read_traveller(search_param) -> str:
         return "Traveller not found."
     
     return travellers
+
+def update_traveller(email_to_search, email_address,first_name,last_name,birth_date,phone_number,gender,
+                     streetname,house_number,zip_code,city,driving_license_number) -> bool:
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE travellers
+        SET email_address = ?,
+            first_name = ?, 
+            last_name = ?, 
+            birthday = ?,
+            gender = ?,
+            street_name = ?,
+            house_number = ?,
+            zip_code = ?,
+            city = ?,
+            mobile_phone = ?,
+            driving_license_number = ?
+        WHERE email_address = ?
+    ''', (email_address,first_name,last_name,birth_date,phone_number,gender,
+        streetname,house_number,zip_code,city,driving_license_number, email_to_search))
+    conn.commit()
+    updated = cursor.rowcount > 0
+    conn.close()
+    return updated

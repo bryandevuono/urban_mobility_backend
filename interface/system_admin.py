@@ -148,3 +148,39 @@ def search_traveller():
         print("Traveller found:", traveller)
     else:
         print("Traveller not found.")
+
+def change_traveller():
+    clear()
+    print("Enter the email of the traveller you want to update:")
+    email_to_search = input()
+    first_name = input("First Name (leave blank to keep current): ")
+    last_name = input("Last Name (leave blank to keep current): ")
+    birth_date = input("Birth Date (YYYY-MM-DD, leave blank to keep current): ")
+    phone_number = input("Phone Number (leave blank to keep current): ")
+    gender = input("Gender (M/F, leave blank to keep current): ")
+    streetname = input("Street Name (leave blank to keep current): ")
+    house_number = input("House Number (leave blank to keep current): ")
+    zip_code = input("Zip Code (leave blank to keep current): ")
+    city = input("City (leave blank to keep current): ")
+    driving_license_number = input("Driving License Number (leave blank to keep current): ")
+    email_address = input("Email Address (leave blank to keep current): ")
+
+    updated = update_traveller(
+        email_to_search,
+        email_address,
+        first_name,
+        last_name,
+        birth_date,
+        phone_number,
+        gender,
+        streetname,
+        house_number,
+        zip_code,
+        city,
+        driving_license_number
+    )
+    if not updated:
+        print("Traveller not found or update failed.")
+        return
+    print("Traveller updated successfully!")
+    

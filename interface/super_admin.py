@@ -34,6 +34,7 @@ def menu():
         "4": add_service_engineer,
         "6": delete_service_engineer,
         "9": add_traveller,
+        "10": change_traveller,
         "11": delete_traveller,
         "12": add_scooter,
         "13": update_scooter,
