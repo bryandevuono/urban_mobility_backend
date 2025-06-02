@@ -1,6 +1,7 @@
 import zipfile
 import os
 from datetime import datetime
+import sqlite3
 
 def backup_database():
     db_path = "database/urban_mobility.db"

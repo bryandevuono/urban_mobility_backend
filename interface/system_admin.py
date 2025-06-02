@@ -40,7 +40,7 @@ def menu(username):
         '6': change_profile_service_engineer,
         '7': delete_service_engineer,
         '8': reset_password_service_engineer,
-        '9': "",  # Assuming you have a function to view logs
+        '9': "",  # TODO: Implement view backend system logs
         '10': add_traveller,
         '11': change_traveller,
         '12': delete_traveller,
