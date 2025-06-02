@@ -14,9 +14,9 @@ clear = lambda: os.system('cls')
 def menu(username):
     clear()
     print("Welcome to the Backend System, System Admin!")
-    #service_engineer_menu
-    service_engineer_menu()
-    #system_admin
+    print("1: Update the attributes of scooters in the system")
+    print("2: Search and retrieve the information of a scooter")
+    print("3: Update your password")
     print("4: Check the list of users and their roles")
     print("5: Add a new Service Engineer to the backend system")
     print("6: Modify or update an existing Service Engineer account and profile")
@@ -67,19 +67,21 @@ def add_scooter():
     brand = input("Brand: ")
     model = input("Model: ")
     serial_number = input("Serial Number: ")
-    top_speed = float(input("Top Speed (km/h): "))
-    battery_capacity = int(input("Battery Capacity (mAh): "))
-    soc = int(input("State of Charge (%): "))
-    target_range_soc = int(input("Target Range SOC Min (%): "))
-    location = float(input("location: "))
-    out_of_service = int(input("Out of Service (0 for No, 1 for Yes): "))
-    mileage = float(input("Mileage (km): "))
+    top_speed = (input("Top Speed (km/h): "))
+    battery_capacity = (input("Battery Capacity (mAh): "))
+    soc = (input("State of Charge (%): "))
+    target_range_soc = (input("Target Range SOC Min (%): "))
+    location = (input("location: "))
+    out_of_service = (input("Out of Service (0 for No, 1 for Yes): "))
+    mileage = (input("Mileage (km): "))
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
 
-    add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc,
+    added = add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc,
                     location, out_of_service, mileage, last_maintenance_date)
-    
-    print("Scooter added successfully!")
+    if added:
+        print("\nScooter added successfully!")
+    else: 
+        print("\nSomething went wrong while trying to add the scooter. Please check the input values.")
     
 def update_scooter():
     clear()

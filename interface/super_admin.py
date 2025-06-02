@@ -13,36 +13,53 @@ clear = lambda: os.system('cls')
 def menu():
     print("Welcome to the Backend System, super admin!")
     # service_engineer 'inheritance'
-    service_engineer_menu()
-    # system_admin 'inheritance'
-    system_admin_menu()
-    #super_admin
-    print("16: Add a new System Administrator to the backend system")
-    print("17: Modify or update an existing System Administrator account and profile")
-    print("18: Delete an existing System Administrator account")
-    print("19: Reset an existing System Administrator password (temporary password)")
-    print("20: Backup menu")
+    print("1: Update the attributes of scooters in the system")
+    print("2: Search and retrieve the information of a scooter")
+    print("3: Update your password")
+    print("4: Check the list of users and their roles")
+    print("5: Add a new Service Engineer to the backend system")
+    print("6: Modify or update an existing Service Engineer account and profile")
+    print("7: Delete an existing Service Engineer account")
+    print("8: Reset an existing Service Engineer password (temporary password)")
+    print("9: View backend system logs")
+    print("10: Add a new Traveller to the backend system")
+    print("11: Update the information of a Traveller")
+    print("12: Delete a Traveller from the backend system")
+    print("13: Add a new scooter to the backend system")
+    print("14: Update the information of a scooter")
+    print("15: Delete a scooter from the backend system")
+    print("16: Search and retrieve the information of a Traveller")
+
+    print("17: Add a new System Administrator to the backend system")
+    print("18: Modify or update an existing System Administrator account and profile")
+    print("19: Delete an existing System Administrator account")
+    print("20: Reset an existing System Administrator password (temporary password)")
+    print("21: Backup menu")
     print("0: Exit")
     print("Please select an option (0-20):")
 
     options = {
+        "1": update_scooter_attr,
         "2": search_scooter,
-        "3": display_users,
-        "4": add_service_engineer,
-        "5": change_profile_service_engineer,
-        "6": delete_service_engineer,
-        "9": add_traveller,
-        "10": change_traveller,
-        "11": delete_traveller,
-        "12": add_scooter,
-        "13": update_scooter,
-        "14": delete_scooter,
-        "15": search_traveller,
-        "16": add_system_admin,
-        "17": change_profile_system_admin,
-        "18": delete_system_admin,
-        "19": reset_password_system_admin,
-        "20": backup_menu
+        # "3": update_password, # This is not implemented in the super admin menu
+        "4": display_users,
+        "5": add_service_engineer,
+        "6": change_profile_service_engineer,
+        "7": delete_service_engineer,
+        "8": reset_password_service_engineer,
+        "9": system_admin_menu,  # Placeholder for backend system logs
+        "10": add_traveller,
+        "11": change_traveller,
+        "12": delete_traveller,
+        "13": add_scooter,
+        "14": update_scooter,
+        "15": delete_scooter,
+        "16": search_traveller,
+        "17": add_system_admin,
+        "18": change_profile_system_admin,
+        "19": delete_system_admin,
+        "20": reset_password_system_admin,
+        "21": backup_menu
     }
 
     while True:

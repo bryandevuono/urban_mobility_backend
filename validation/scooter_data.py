@@ -72,3 +72,10 @@ def validate_last_maintenance_date(date):
     else:
         print("Invalid date format. It should be in the format 'YYYY-MM-DD'.")
         return False
+    
+def validate_search_parameter(input_param):
+    if len(input_param) < max_input_length and len(input_param) > 0:
+        return True
+    else:
+        print("Invalid search parameter. It should be less than 50 characters.")
+        return False

@@ -1,9 +1,33 @@
 import sqlite3
-
-errors = []
+import sys
+sys.path.insert(0, '../validation')
+from scooter_data import validate_brand, validate_model, validate_serial_number, \
+    validate_top_speed, validate_battery_capacity, validate_state_of_charge, \
+    validate_location, validate_out_of_service, validate_mileage, validate_last_maintenance_date
 
 def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, soc, target_range_soc,
                     location, out_of_service, mileage, last_maintenance_date) -> bool:
+    
+    #validate inputs
+    validators = [
+        validate_brand(brand),
+        validate_model(model),
+        validate_serial_number(serial_number),
+        validate_top_speed(top_speed), 
+        validate_battery_capacity(battery_capacity),
+        validate_state_of_charge(soc),
+        validate_state_of_charge(target_range_soc),
+        validate_location(location), 
+        validate_out_of_service(out_of_service),
+        validate_mileage(mileage),
+        validate_last_maintenance_date(last_maintenance_date)
+    ]
+    
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
@@ -15,7 +39,8 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
             out_of_service, mileage, last_maintenance_date
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (brand,model,serial_number,top_speed,battery_capacity,soc,target_range_soc,location,out_of_service,mileage,last_maintenance_date)
+        ''', (brand,model,serial_number,float(top_speed),float(battery_capacity),int(soc),int(target_range_soc),float(location),
+              int(out_of_service),float(mileage),last_maintenance_date)
         )
 
     conn.commit()
@@ -25,6 +50,27 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
 
 def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,soc,target_range_soc,
                         location,out_of_service,mileage,last_maintenance_date) -> bool:
+    
+    #validate inputs
+    validators = [
+        validate_brand(brand),
+        validate_model(model),
+        validate_serial_number(serial_number),
+        validate_top_speed(top_speed), 
+        validate_battery_capacity(battery_capacity),
+        validate_state_of_charge(soc),
+        validate_state_of_charge(target_range_soc),
+        validate_location(location), 
+        validate_out_of_service(out_of_service),
+        validate_mileage(mileage),
+        validate_last_maintenance_date(last_maintenance_date)
+    ]
+    
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
@@ -41,18 +87,23 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
             mileage = ?,
             last_maintenance_date = ?
         WHERE serial_number = ?
-    ''', (brand, model, top_speed, battery_capacity, soc, target_range_soc,
-        location, out_of_service, mileage, last_maintenance_date, serial_number))
+    ''', (brand,model,serial_number,float(top_speed),float(battery_capacity),int(soc),int(target_range_soc),float(location),
+              int(out_of_service),float(mileage),last_maintenance_date))
+    
     conn.commit()
+    
     if cursor.rowcount == 0:
-        print(f"Debug: No rows updated. Check if serial_number '{serial_number}' exists in the database.")
-        errors.append("No scooter found with the given serial number.")
         conn.close()
         return False
     conn.close()
     return True
 
 def delete_scooter_info(serial_number) -> bool:
+
+    if validate_serial_number(serial_number):
+        pass
+    else:
+        return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -61,8 +112,8 @@ def delete_scooter_info(serial_number) -> bool:
         WHERE serial_number = ?
     ''', (serial_number,))
     conn.commit()
+
     if cursor.rowcount == 0:
-        errors.append("No scooter found with the given serial number.")
         conn.close()
         return False
     conn.close()
@@ -93,7 +144,6 @@ def read_scooter_info(search_param) -> list:
     conn.close()
     
     if not scooters:
-        errors.append("No scooters found matching the search parameter.")
         return []
     
     return scooters
