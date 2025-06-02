@@ -40,7 +40,9 @@ def menu():
         "15": search_traveller,
         "16": add_system_admin,
         "17": change_profile_system_admin,
-        "18": delete_system_admin
+        "18": delete_system_admin,
+        "19": reset_password_system_admin,
+        "20": backup_menu
     }
 
     while True:
@@ -86,3 +88,10 @@ def change_profile_system_admin():
     lastname = input("lastname:")
     user_to_modify = input("user to modify:")
     update_profile_admin(username, firstname, lastname, user_to_modify)
+
+def reset_password_system_admin():
+    clear()
+    print("Enter the username of the service engineer whose password you want to reset:")
+    username = input()    
+    new_password = reset_password(username, "service_engineer")
+    print(new_password)

@@ -192,3 +192,10 @@ def change_profile_service_engineer():
     lastname = input("New Last Name (leave blank to keep current): ")
     user_to_modify = input("Username of the service engineer to modify: ")
     update_profile_service_engineer(username, firstname, lastname, user_to_modify)
+
+def reset_password_service_engineer():
+    clear()
+    print("Enter the username of the service engineer whose password you want to reset:")
+    username = input()    
+    new_password = reset_password(username, "service_engineer")
+    print(new_password)

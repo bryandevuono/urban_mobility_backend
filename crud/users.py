@@ -1,6 +1,8 @@
 import sqlite3
 from datetime import datetime
 import sys
+import string
+import random
 sys.path.insert(0, '../auth')
 from hash import hash_password
 
@@ -100,3 +102,30 @@ def update_profile_admin(username, firstname, lastname, user_to_modify):
     conn.commit()
     conn.close()
     return True
+
+def reset_password(username, role) -> str:
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    all_characters = string.ascii_letters + string.digits + string.punctuation
+
+    # ask the user for the desired length of the password
+    length = 30
+
+    # generate a password using randomly chosen characters
+    # using the 'choices' function from the random module
+    # and joining the resulting characters into a string
+    generated_temp_password = ''.join(random.choices(all_characters, k=length))    
+    hashed_password = hash_password(generated_temp_password)
+
+    cursor.execute('''
+        UPDATE users
+        SET password = ?
+        WHERE username = ?
+        AND role = ?
+    ''', (hashed_password, username, role))
+
+    conn.commit()
+    conn.close()
+    
+    return "This is your temporary password: " + generated_temp_password + "\nPlease change it after logging in."
