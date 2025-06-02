@@ -44,8 +44,8 @@ def validate_state_of_charge(soc):
         return False
     
 def validate_location(location):
-    regex_location = "^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$"
-    if len(location) < max_input_length and len(location) > 0 and location.isalnum() and re.match(regex_location, location):
+    location_pattern = r'^[-+]?[0-9]*\.?[0-9]+$'
+    if len(location) < max_input_length and len(location) > 0 and re.match(location_pattern, location):
         return True
     else: 
         print("Invalid location format. It should be in the format 'latitude, longitude' (e.g., '37.7749, -122.4194').")
