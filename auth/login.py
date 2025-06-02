@@ -3,13 +3,15 @@ import sys
 sys.path.insert(0, '../interface')
 import service_engineer
 import system_admin
-from system_admin import *
+import system_admin
+import super_admin
 import sqlite3
 
 def authenticate_user(username, password):
     #TODO: validate input (required, length format)
     #hard-coded
     if username == "super_admin" and password == "Admin123?":
+        super_admin.menu()
         return True
     
     #check if username exists and get password and role
@@ -25,18 +27,16 @@ def authenticate_user(username, password):
     #check password
     authenticated = False
     if result:
-        authenticated = check_password(result[0], password)
+        authenticated = check_password(password ,result[0])
     else:
         print("Username does not exist.")
         return False
     
     # redirect to the correct menu based on role
     if authenticated and result[1] == "service_engineer":
-        print("Welcome, service engineer!")
         service_engineer.menu()
         return True
     elif authenticated and result[1] == "system_admin":
-        print("Welcome, system administrator!")
         system_admin.menu()
         return True
     else:

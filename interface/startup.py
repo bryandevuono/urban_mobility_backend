@@ -12,15 +12,16 @@ def welcome_screen():
         print("Welcome to the urban mobility system\n"
            "Choose an option:\n"
            "\nLogin (enter L)\n"
-           "Register (enter R)")
+           "Exit (enter E)\n")
         login_option = input()
         if (login_option.lower() == "l" and len(login_option) < 2):
             clear()
             login_screen()
             break
-        if (login_option.lower() == "r" and len(login_option) < 2):
+        if (login_option.lower() == "e" and len(login_option) < 2):
             clear()
-            signup_screen()
+            print("Exiting the system. Goodbye!")
+            sys.exit(0)
             break
         else:
             clear()

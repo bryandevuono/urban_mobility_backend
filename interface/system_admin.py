@@ -100,7 +100,7 @@ def add_service_engineer():
     role = "service_engineer" # make const
     first_name = input("first_name:")
     last_name = input("last_name:")
-    create_user(username, password, role, first_name, last_name)
+    create_user(username, password, first_name, last_name, role)
 
 def display_users():
     clear()
