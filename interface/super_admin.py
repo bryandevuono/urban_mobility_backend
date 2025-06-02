@@ -93,5 +93,5 @@ def reset_password_system_admin():
     clear()
     print("Enter the username of the service engineer whose password you want to reset:")
     username = input()    
-    new_password = reset_password(username, "service_engineer")
+    new_password = reset_password(username, "system_admin")
     print(new_password)
