@@ -33,12 +33,5 @@ def login_screen():
         username = input("Enter your username\n")
         password = input("Enter your password\n")
         authenticate_user(username, password)
-            
-def signup_screen():
-    while True:
-        username = input("Enter your username\n")
-        password = input("Enter your password\n")
-        firstname = input("Enter your password\n")
-        lastname = input("Enter your password\n")
 
 welcome_screen()
