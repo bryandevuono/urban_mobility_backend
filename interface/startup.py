@@ -31,16 +31,7 @@ def login_screen():
     while True:
         username = input("Enter your username\n")
         password = input("Enter your password\n")
-        login_attempt = authenticate_user(username, password)
-        if login_attempt:
-            # TODO: determine role
-            clear()
-            super_admin_menu()
-            break
-        else:
-            clear()
-            print("Wrong login credentials\n")
-            continue
+        authenticate_user(username, password)
             
 def signup_screen():
     while True:
@@ -50,10 +41,3 @@ def signup_screen():
         lastname = input("Enter your password\n")
 
 welcome_screen()
-
-# if check_password(entered_pw, user_hashed_pw):
-#     print("Welcome, admin!")
-#     role = get_user_role(username)
-#     load_menu(role)
-# else:
-#     log_failed_login(username)
