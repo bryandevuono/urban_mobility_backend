@@ -1,4 +1,5 @@
 from service_engineer import menu as service_engineer_menu
+from service_engineer import *
 import os
 import sys
 sys.path.insert(0, '../crud')
@@ -10,25 +11,55 @@ from travellers import *
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
 
-def menu():
+def menu(username):
     clear()
     print("Welcome to the Backend System, System Admin!")
     #service_engineer_menu
     service_engineer_menu()
     #system_admin
-    print("3: Check the list of users and their roles")
-    print("4: Add a new Service Engineer to the backend system")
-    print("5: Modify or update an existing Service Engineer account and profile")
-    print("6: Delete an existing Service Engineer account")
-    print("7: Reset an existing Service Engineer password (temporary password)")
-    print("8: View backend system logs")
-    print("9: Add a new Traveller to the backend system")
-    print("10: Update the information of a Traveller")
-    print("11: Delete a Traveller from the backend system")
-    print("12: Add a new scooter to the backend system")
-    print("13: Update the information of a scooter")
-    print("14: Delete a scooter from the backend system")
-    print("15: Search and retrieve the information of a Traveller")
+    print("4: Check the list of users and their roles")
+    print("5: Add a new Service Engineer to the backend system")
+    print("6: Modify or update an existing Service Engineer account and profile")
+    print("7: Delete an existing Service Engineer account")
+    print("8: Reset an existing Service Engineer password (temporary password)")
+    print("9: View backend system logs")
+    print("10: Add a new Traveller to the backend system")
+    print("11: Update the information of a Traveller")
+    print("12: Delete a Traveller from the backend system")
+    print("13: Add a new scooter to the backend system")
+    print("14: Update the information of a scooter")
+    print("15: Delete a scooter from the backend system")
+    print("16: Search and retrieve the information of a Traveller")
+
+    options = {
+        '1': update_scooter_attr,
+        '2': search_scooter,
+        '3': update_password,
+        '4': display_users,
+        '5': add_service_engineer,
+        '6': change_profile_service_engineer,
+        '7': delete_service_engineer,
+        '8': reset_password_service_engineer,
+        '9': "",  # Assuming you have a function to view logs
+        '10': add_traveller,
+        '11': change_traveller,
+        '12': delete_traveller,
+        '13': add_scooter,
+        '14': update_scooter,
+        '15': delete_scooter,
+        '16': search_traveller,
+        'e': lambda: sys.exit(0)  # Exit option
+    }
+    while True:
+        choice = input("Enter your choice (3-15): ")
+        if choice in options:
+            clear()
+            options[choice]()
+        elif choice.lower() == 'e':
+            print("Exiting the system. Goodbye!")
+            sys.exit(0)
+        else:
+            print("Invalid choice. Please try again.")
 
 def add_scooter():
     clear()
