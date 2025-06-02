@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
-from users import create_user, read_users, delete_user
+from users import *
 from travellers import *
 
 # TODO: add validation for inputs
@@ -184,3 +184,11 @@ def change_traveller():
         return
     print("Traveller updated successfully!")
     
+def change_profile_service_engineer():
+    print("Enter the username of the service engineer you want to modify:")
+
+    username = input()
+    firstname = input("New First Name (leave blank to keep current): ")
+    lastname = input("New Last Name (leave blank to keep current): ")
+    user_to_modify = input("Username of the service engineer to modify: ")
+    update_profile_service_engineer(username, firstname, lastname, user_to_modify)

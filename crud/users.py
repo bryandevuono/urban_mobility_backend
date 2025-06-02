@@ -50,3 +50,53 @@ def delete_user(username, role) -> bool:
     conn.close()
 
     return True
+
+def modify_password(password_input, username) -> bool:
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    hashed_password = hash_password(password_input)
+
+    cursor.execute('''
+        UPDATE users
+        SET password = ?
+        WHERE username = ?
+    ''', (hashed_password, username))
+
+    conn.commit()
+    conn.close()
+    return True
+
+def update_profile_service_engineer(username, firstname, lastname, user_to_modify):
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE users
+        SET username = ?,
+            first_name = ?,
+            last_name = ?
+        WHERE username = ?
+        AND role = "service_engineer"
+    ''', (username, firstname, lastname, user_to_modify))
+
+    conn.commit()
+    conn.close()
+    return True
+
+def update_profile_admin(username, firstname, lastname, user_to_modify):
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE users
+        SET username = ?,
+            first_name = ?,
+            last_name = ?
+        WHERE username = ?
+        AND role = "system_admin"
+    ''', (username, firstname, lastname, user_to_modify))
+
+    conn.commit()
+    conn.close()
+    return True
