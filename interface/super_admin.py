@@ -8,7 +8,8 @@ import sys
 sys.path.insert(0, '../crud')
 from users import create_user, delete_user, update_profile, reset_password, read_users    
 
-clear = lambda: os.system('cls')
+# clear = lambda: ('cls')
+clear = lambda: print('------------------------------------------------------------------------------\n')
 
 def menu():
     #service engineer
