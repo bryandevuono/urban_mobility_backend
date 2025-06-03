@@ -30,7 +30,7 @@ def validate_house_number(house_number):
 def validate_zip_code(zip_code):
     #zip code is DDDDXX
     zipcode_re = r'\d{4}[ ]?[A-Z]{2}'
-    if len(zip_code) == 6 and re.match(zipcode_re, zip_code):
+    if len(zip_code) == 6 and re.match(zipcode_re, zip_code.upper()):
         return True
     else:
         print("Zip code must be exactly 5 digits long and follow the format XXXXDD.")
