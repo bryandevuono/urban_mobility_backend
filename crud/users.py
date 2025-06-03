@@ -3,25 +3,42 @@ from datetime import datetime
 import sys
 import string
 import random
+sys.path.insert(0, '../validation')
+from account_data import validate_username, validate_password, validate_name
 sys.path.insert(0, '../auth')
 from hash import hash_password
 
 def create_user(username, password, firstname, lastname, role) -> bool:
+    validators = [
+        validate_username(username),
+        validate_password(password),
+        validate_name(firstname),
+        validate_name(lastname)
+    ]
+    
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     
     username = username.lower()
     password = hash_password(password)
+    try:
+        cursor.execute('''
+            INSERT INTO users (
+                username, password, first_name, last_name, role, register_date
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            ''', (username, password, firstname, lastname, role, datetime.now())
+            )
 
-    cursor.execute('''
-        INSERT INTO users (
-            username, password, first_name, last_name, role, register_date
-        )
-        VALUES (?, ?, ?, ?, ?, ?)
-        ''', (username, password, firstname, lastname, role, datetime.now())
-        )
-
-    conn.commit()
+        conn.commit()
+    except sqlite3.IntegrityError as e:
+        print("Error: User with this username already exists.")
     conn.close()
 
     return True
