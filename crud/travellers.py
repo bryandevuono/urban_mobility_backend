@@ -41,6 +41,10 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
     return True
 
 def remove_traveller(traveller_email) -> bool:
+    if validate_email:
+        pass
+    else:
+        return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -85,6 +89,25 @@ def read_traveller(search_param) -> str:
 
 def update_traveller(email_to_search, email_address,first_name,last_name,birth_date,phone_number,gender,
                      streetname,house_number,zip_code,city,driving_license_number) -> bool:
+    validators = [
+        validate_name(first_name),
+        validate_name(last_name),
+        validate_gender(gender),
+        validate_name(streetname),
+        validate_birthday(birth_date),
+        validate_house_number(house_number),
+        validate_zip_code(zip_code),
+        validate_city(city),
+        validate_email(email_address),
+        validate_phone_number_nl(phone_number),
+        validate_driver_license_number(driving_license_number)
+    ]
+
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute('''

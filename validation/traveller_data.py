@@ -20,6 +20,7 @@ def validate_birthday(birthday):
     else:
         print("Invalid date format. It should be in the format 'YYYY-MM-DD'.")
         return False
+    
 def validate_house_number(house_number):
     if len(house_number) > 0 and len(house_number) < 4 and house_number.isalnum():
         return True
@@ -46,7 +47,7 @@ def validate_city(city):
     
 def validate_email(email):
     email_re = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if re.match(email_re, email):
+    if len(email) > 0 and re.match(email_re, email):
         return True
     else:
         print("Please enter a valid email address.")
