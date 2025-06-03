@@ -6,7 +6,7 @@ sys.path.insert(0, '../')
 from constants import *
 import sys
 sys.path.insert(0, '../crud')
-from users import *
+from users import create_user, delete_user, update_profile_admin, reset_password, read_users
 
 clear = lambda: os.system('cls')
 

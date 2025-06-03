@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.insert(0, '../crud')
-from scooters import *
+from scooters import update_scooter_info, read_scooter_info
 from users import modify_password
 
 clear = lambda: os.system('cls')
@@ -43,7 +43,7 @@ def update_scooter_attr():
     state_of_charge = input("State of Charge (%): ")
     target_range_soc = input("Target Range at SOC (%): ")
     location = input("Location: ")
-    out_of_service = input("Out of Service (yes/no): ").lower() == 'yes'
+    out_of_service = input("Out of Service (0/1): ")
     mileage = input("Mileage (km): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
 

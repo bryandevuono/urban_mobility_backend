@@ -50,6 +50,20 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
 
 def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,soc,target_range_soc,
                         location,out_of_service,mileage,last_maintenance_date) -> bool:
+    # check if serial number exists
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM scooter_data
+        WHERE serial_number = ?
+    ''', (serial_number,))
+    scooter = cursor.fetchone()
+    if scooter:
+        pass
+    else:
+        conn.close()
+        print("\nScooter with this serial number does not exist.")
+        return False
     
     #validate inputs
     validators = [
@@ -71,9 +85,7 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
             pass
         else:
             return False
-    
-    conn = sqlite3.connect('../database/urban_mobility.db')
-    cursor = conn.cursor()
+        
     cursor.execute('''
         UPDATE scooter_data
         SET brand = ?,
@@ -87,11 +99,11 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
             mileage = ?,
             last_maintenance_date = ?
         WHERE serial_number = ?
-    ''', (brand,model,serial_number,float(top_speed),float(battery_capacity),int(soc),int(target_range_soc),float(location),
-              int(out_of_service),float(mileage),last_maintenance_date))
+    ''', (brand, model, float(top_speed), float(battery_capacity), int(soc), int(target_range_soc), float(location),
+          int(out_of_service), float(mileage), last_maintenance_date, serial_number))
     
     conn.commit()
-    
+
     if cursor.rowcount == 0:
         conn.close()
         return False

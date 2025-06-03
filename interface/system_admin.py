@@ -5,8 +5,8 @@ import sys
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
-from users import *
-from travellers import *
+from users import create_user, delete_user, update_profile_service_engineer, reset_password, read_users
+from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
 
 # TODO: add validation for inputs
 clear = lambda: os.system('cls')
