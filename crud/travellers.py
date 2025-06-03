@@ -1,7 +1,29 @@
 import sqlite3
+import sys
+sys.path.insert(0, '../validation')
+from traveller_data import validate_name, validate_gender, validate_birthday, validate_house_number, validate_zip_code, validate_city, validate_email, validate_phone_number_nl, validate_driver_license_number
 
 def create_traveller(firstname, lastname, birthday, gender, streetname, house_number, 
                     zip_code, city, email_address, mobile_phone, driving_license_number)-> bool:
+    validators = [
+        validate_name(firstname),
+        validate_name(lastname),
+        validate_gender(gender),
+        validate_name(streetname),
+        validate_birthday(birthday),
+        validate_house_number(house_number),
+        validate_zip_code(zip_code),
+        validate_city(city),
+        validate_email(email_address),
+        validate_phone_number_nl(mobile_phone),
+        validate_driver_license_number(driving_license_number)
+    ]
+
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 

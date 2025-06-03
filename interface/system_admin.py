@@ -167,7 +167,7 @@ def add_traveller():
     streetname = input("Street Name:")
     house_number = input("Street Number:")
     zip_code = input("Zip Code:")
-    city = input("City:")
+    city = input("City ('Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere', 'Breda', 'Nijmegen'):")
     driving_license_number = input("Driving License Number:")
     create_traveller(first_name, last_name, birth_date, email, phone_number, gender, streetname, 
                 house_number, zip_code, city, driving_license_number)
@@ -230,11 +230,9 @@ def change_profile_service_engineer():
     username = input("New username of the service engineer to modify: ")
     update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
 
-def reset_password_service_engineer(admin_username):
+def reset_password_service_engineer():
     clear()
-    print("Enter your admin password to reset a service engineer's password:")
-    admin_password = input("Admin Password: ")
     print("Enter the username of the service engineer whose password you want to reset:")
     username = input()    
-    new_password = reset_password(username, "service_engineer", admin_username, admin_password)
+    new_password = reset_password(username, SERVICE_ENGINEER)
     print(new_password)

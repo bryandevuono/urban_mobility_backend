@@ -149,21 +149,14 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     conn.close()
     return True
 
-def reset_password(username, role, admin_username, admin_password) -> str:
-    conn = sqlite3.connect('../database/urban_mobility.db')
-    cursor = conn.cursor()
-    # Validate the password before proceeding
-    cursor.execute('''
-        SELECT password FROM users
-        WHERE username = ?
-    ''', (admin_username,))
-    result = cursor.fetchone()
-
-    if check_password(admin_password, result[0]):
+def reset_password(username, role) -> str:
+    if validate_username(username):
         pass
     else:
-        return "Password reset failed. Incorrect admin password."
-    
+        return "Invalid username length. It should be between 8 and 10 characters."
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+
     all_characters = string.ascii_letters + string.digits + string.punctuation
 
     length = 30
@@ -177,8 +170,11 @@ def reset_password(username, role, admin_username, admin_password) -> str:
         WHERE username = ?
         AND role = ?
     ''', (hashed_password, username, role))
-
     conn.commit()
-    conn.close()
-    
-    return "This is your temporary password: " + generated_temp_password + "\nPlease change it after logging in."
+    if cursor.rowcount > 0:
+        conn.commit()
+        conn.close()
+        return "This is your temporary password: " + generated_temp_password + "\nPlease change it after logging in."
+    else:
+        conn.close()
+        return "No user found with the specified username and role."
