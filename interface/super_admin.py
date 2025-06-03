@@ -34,7 +34,7 @@ def menu():
     print("19: Delete an existing System Administrator account")
     print("20: Reset an existing System Administrator password (temporary password)")
     print("21: Backup menu")
-    print("0: Exit")
+    print("E: Exit")
     print("Please select an option (0-20):")
 
     options = {
@@ -63,7 +63,7 @@ def menu():
 
     while True:
         choice = input("Please enter your choice: ")
-        if choice == "0":
+        if choice.lower() == "e":
             print("Exiting the backend system. Goodbye!")
             break
         elif choice in options:
@@ -111,7 +111,7 @@ def change_profile_system_admin():
 
 def reset_password_system_admin():
     clear()
-    print("Enter the username of the service engineer whose password you want to reset:")
+    print("Enter the username of the admin whose password you want to reset:")
     username = input()    
-    new_password = reset_password(username, "system_admin")
+    new_password = reset_password(username, SYSTEM_ADMIN)
     print(new_password)

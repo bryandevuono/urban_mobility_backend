@@ -101,17 +101,22 @@ def update_scooter():
     mileage = input("Mileage (km, leave blank to keep current): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD, leave blank to keep current): ")
 
-    update_scooter_info(serial_number, 
-                        brand, 
-                        model, 
-                        top_speed,
-                        battery_capacity,
-                        soc,
-                        target_range_soc,
-                        location,
-                        out_of_service,
-                        mileage,
-                        last_maintenance_date)
+    updated = update_scooter_info(serial_number, 
+                                brand, 
+                                model, 
+                                top_speed,
+                                battery_capacity,
+                                soc,
+                                target_range_soc,
+                                location,
+                                out_of_service,
+                                mileage,
+                                last_maintenance_date)
+    if updated:
+        print("Scooter updated successfully!")
+    else:
+        print("Scooter not found or update failed. Please check the serial number and input values.")
+        return
     
     print("Scooter updated successfully!")
 
@@ -176,7 +181,11 @@ def delete_traveller():
     clear()
     print("Enter the email of the traveller you want to delete:")
     email = input()
-    remove_traveller(email)
+    removed = remove_traveller(email)
+    if removed:
+        print(f"Traveller with email {email} deleted successfully.")
+    else:
+        print(f"Traveller with email {email} not found or deletion failed.\n Check if the email is valid and exists in the system.")
 
 def search_traveller():
     clear()

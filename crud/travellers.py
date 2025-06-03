@@ -41,9 +41,10 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
     return True
 
 def remove_traveller(traveller_email) -> bool:
-    if validate_email:
+    if validate_email(traveller_email):
         pass
     else:
+        print("Invalid email address.")
         return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
@@ -52,12 +53,17 @@ def remove_traveller(traveller_email) -> bool:
         DELETE FROM travellers WHERE email_address = ?
         ''', (traveller_email,))
 
-    conn.commit()
-    conn.close()
-
-    return True
+    if cursor.rowcount > 0:
+        conn.commit()
+        conn.close()
+        return True
+    else:
+        return False
 
 def read_traveller(search_param) -> str:
+    #buffer overflow protection
+    if len(search_param) > 60:
+        return "Search term too long."
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 

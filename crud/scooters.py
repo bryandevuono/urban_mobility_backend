@@ -51,6 +51,11 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
 def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,soc,target_range_soc,
                         location,out_of_service,mileage,last_maintenance_date) -> bool:
     # check if serial number exists
+    if validate_serial_number(serial_number):
+        pass
+    else:
+        print("\nInvalid serial number format. Please try again.")
+        return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -69,7 +74,6 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
     validators = [
         validate_brand(brand),
         validate_model(model),
-        validate_serial_number(serial_number),
         validate_top_speed(top_speed), 
         validate_battery_capacity(battery_capacity),
         validate_state_of_charge(soc),

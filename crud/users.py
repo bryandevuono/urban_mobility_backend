@@ -170,7 +170,9 @@ def reset_password(username, role) -> str:
         WHERE username = ?
         AND role = ?
     ''', (hashed_password, username, role))
+    
     conn.commit()
+
     if cursor.rowcount > 0:
         conn.commit()
         conn.close()

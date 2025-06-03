@@ -8,7 +8,12 @@ import super_admin
 import sqlite3
 
 def authenticate_user(username, password):
-    #TODO: validate input (required, length format)
+    #validate input (required, length format)
+    if len(username) > 0 and len(password) > 0 and len(username) <= 12 and len(password) <= 12:
+        pass
+    else:
+        print("Username and password cannot be empty or too long (12 characters).")
+        return False
     #hard-coded
     if username == "super_admin" and password == "Admin123?":
         super_admin.menu()
