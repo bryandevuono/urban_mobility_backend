@@ -113,6 +113,7 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     # Validate the input data
     validators = [
         validate_username(username),
+        validate_username(user_to_modify),
         validate_name(firstname),
         validate_name(lastname)
     ]
@@ -132,13 +133,13 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
             last_name = ?
         WHERE username = ?
         AND role = ?
-    ''', (user_to_modify, firstname, lastname, username, role))
-    conn.commit()
+    ''', (username, firstname, lastname, user_to_modify, role))
     # Check if the update was successful
     if cursor.rowcount == 0:
-        print("No user found with the specified username and role.")
+        print("No user found with the specified username/role.")
         conn.close()
         return False
+    conn.commit()
     conn.close()
     return True
 
