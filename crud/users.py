@@ -109,35 +109,31 @@ def modify_password(old_password, password_input, username) -> bool:
     conn.close()
     return True
 
-def update_profile_service_engineer(username, firstname, lastname, user_to_modify):
+def update_profile_service_engineer(username, firstname, lastname, user_to_modify, role) -> bool:
+    # Validate the input data
+    validators = [
+        validate_username(username),
+        validate_username(user_to_modify),
+        validate_name(firstname),
+        validate_name(lastname)
+    ]
+
+    for validator in validators:
+        if validator:
+            pass
+        else:
+            return False
+        
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-
     cursor.execute('''
         UPDATE users
         SET username = ?,
             first_name = ?,
             last_name = ?
         WHERE username = ?
-        AND role = "service_engineer"
-    ''', (username, firstname, lastname, user_to_modify))
-
-    conn.commit()
-    conn.close()
-    return True
-
-def update_profile_admin(username, firstname, lastname, user_to_modify):
-    conn = sqlite3.connect('../database/urban_mobility.db')
-    cursor = conn.cursor()
-
-    cursor.execute('''
-        UPDATE users
-        SET username = ?,
-            first_name = ?,
-            last_name = ?
-        WHERE username = ?
-        AND role = "system_admin"
-    ''', (username, firstname, lastname, user_to_modify))
+        AND role = ?
+    ''', (username, firstname, lastname, user_to_modify, role))
 
     conn.commit()
     conn.close()

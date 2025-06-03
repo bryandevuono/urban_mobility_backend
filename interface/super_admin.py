@@ -104,7 +104,7 @@ def change_profile_system_admin():
     firstname = input("firstname:")
     lastname = input("lastname:")
     user_to_modify = input("user to modify:")
-    update_profile_admin(username, firstname, lastname, user_to_modify)
+    update_profile_admin(username, firstname, lastname, user_to_modify, SYSTEM_ADMIN)
 
 def reset_password_system_admin():
     clear()
