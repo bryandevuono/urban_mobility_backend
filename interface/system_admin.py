@@ -233,6 +233,7 @@ def change_traveller():
     print("Traveller updated successfully!")
     
 def change_profile_service_engineer():
+    clear()
     user_to_modify = input("Enter the username of the service engineer you want to modify:")
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
