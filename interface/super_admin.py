@@ -11,10 +11,13 @@ from users import create_user, delete_user, update_profile, reset_password, read
 clear = lambda: os.system('cls')
 
 def menu():
+    #service engineer
+    clear()
     print("Welcome to the Backend System, super admin!")
     print("1: Update the attributes of scooters in the system")
     print("2: Search and retrieve the information of a scooter")
     print("3: Update your password")
+    # system admin
     print("4: Check the list of users and their roles")
     print("5: Add a new Service Engineer to the backend system")
     print("6: Modify or update an existing Service Engineer account and profile")
@@ -28,7 +31,7 @@ def menu():
     print("14: Update the information of a scooter")
     print("15: Delete a scooter from the backend system")
     print("16: Search and retrieve the information of a Traveller")
-
+    # super admin
     print("17: Add a new System Administrator to the backend system")
     print("18: Modify or update an existing System Administrator account and profile")
     print("19: Delete an existing System Administrator account")
