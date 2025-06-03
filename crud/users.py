@@ -6,7 +6,7 @@ import random
 sys.path.insert(0, '../validation')
 from account_data import validate_username, validate_password, validate_name
 sys.path.insert(0, '../auth')
-from hash import hash_password
+from hash import hash_password, check_password
 
 def create_user(username, password, firstname, lastname, role) -> bool:
     validators = [
@@ -37,6 +37,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
             )
 
         conn.commit()
+
     except sqlite3.IntegrityError as e:
         print("Error: User with this username already exists.")
     conn.close()
@@ -71,17 +72,38 @@ def delete_user(username, role) -> bool:
 
     return True
 
-def modify_password(password_input, username) -> bool:
+def modify_password(old_password, password_input, username) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
+    # Validate the password before proceeding
+    cursor.execute('''
+        SELECT password FROM users
+        WHERE username = ?
+    ''', (username,))
+    result = cursor.fetchone()
 
-    hashed_password = hash_password(password_input)
-
+    if check_password(old_password, result[0]):
+        pass
+    else:
+        print("Old password is incorrect.")
+        return False
+    
+    if not validate_password(password_input):
+        return False
+    
+    # Check if the new password is the same as the old one
+    if old_password == password_input:
+        print("The new password cannot be the same as the current password.")
+        conn.close()
+        return False
+    
+    new_hashed_password = hash_password(password_input)
+    # Update the password in the database
     cursor.execute('''
         UPDATE users
         SET password = ?
         WHERE username = ?
-    ''', (hashed_password, username))
+    ''', (new_hashed_password, username))
 
     conn.commit()
     conn.close()

@@ -64,9 +64,11 @@ def search_scooter():
 
 def update_password(username):
     clear()
+    print("Enter your old password:")
+    old_password = input("Enter you old password:")
     print("Enter your new password:")
     new_password = input("New Password: ")
-    modified = modify_password(new_password, username)
+    modified = modify_password(old_password, new_password, username)
     if modified:
         print("Password updated successfully!")
     else:
