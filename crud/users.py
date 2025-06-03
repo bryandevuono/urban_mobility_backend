@@ -59,6 +59,13 @@ def read_users() -> list:
     return users
 
 def delete_user(username, role) -> bool:
+    # Validate the username and role
+    if validate_username(username):
+        pass
+    else:
+        print("Invalid username length. It should be between 8 and 10 characters.")
+        return False
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -113,7 +120,6 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     # Validate the input data
     validators = [
         validate_username(username),
-        validate_username(user_to_modify),
         validate_name(firstname),
         validate_name(lastname)
     ]
@@ -143,18 +149,25 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     conn.close()
     return True
 
-def reset_password(username, role) -> str:
+def reset_password(username, role, admin_username, admin_password) -> str:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
+    # Validate the password before proceeding
+    cursor.execute('''
+        SELECT password FROM users
+        WHERE username = ?
+    ''', (admin_username,))
+    result = cursor.fetchone()
 
+    if check_password(admin_password, result[0]):
+        pass
+    else:
+        return "Password reset failed. Incorrect admin password."
+    
     all_characters = string.ascii_letters + string.digits + string.punctuation
 
-    # ask the user for the desired length of the password
     length = 30
 
-    # generate a password using randomly chosen characters
-    # using the 'choices' function from the random module
-    # and joining the resulting characters into a string
     generated_temp_password = ''.join(random.choices(all_characters, k=length))    
     hashed_password = hash_password(generated_temp_password)
 

@@ -41,7 +41,7 @@ def menu(username):
         '5': add_service_engineer,
         '6': change_profile_service_engineer,
         '7': delete_service_engineer,
-        '8': reset_password_service_engineer,
+        '8': reset_password_service_engineer(username),
         '9': "",  # TODO: Implement view backend system logs
         '10': add_traveller,
         '11': change_traveller,
@@ -149,7 +149,11 @@ def delete_service_engineer():
     clear()
     print("Enter the username of the service engineer you want to delete:")
     username = input()
-    delete_user(username, "service_engineer")
+    deleted = delete_user(username, "service_engineer")
+    if deleted:
+        print(f"Service Engineer {username} deleted successfully.")
+    else:
+        print(f"Service Engineer {username} not found or deletion failed.")
 
 def add_traveller():
     clear()
@@ -180,7 +184,7 @@ def search_traveller():
     search_param = input()
     traveller = read_traveller(search_param)
     if traveller:
-        print("Traveller found:", traveller)
+        print("Result", traveller)
     else:
         print("Traveller not found.")
 
@@ -226,9 +230,11 @@ def change_profile_service_engineer():
     username = input("New username of the service engineer to modify: ")
     update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
 
-def reset_password_service_engineer():
+def reset_password_service_engineer(admin_username):
     clear()
+    print("Enter your admin password to reset a service engineer's password:")
+    admin_password = input("Admin Password: ")
     print("Enter the username of the service engineer whose password you want to reset:")
     username = input()    
-    new_password = reset_password(username, "service_engineer")
+    new_password = reset_password(username, "service_engineer", admin_username, admin_password)
     print(new_password)

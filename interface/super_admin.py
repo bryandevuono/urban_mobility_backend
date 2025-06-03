@@ -99,11 +99,15 @@ def delete_system_admin():
 def change_profile_system_admin():
     clear()
     print("Enter the info of the system admin you want to change:")
+    user_to_modify = input("user to modify:")
     username = input("username:")
     firstname = input("firstname:")
     lastname = input("lastname:")
-    user_to_modify = input("user to modify:")
-    update_profile(username, firstname, lastname, user_to_modify, SYSTEM_ADMIN)
+    updated = update_profile(username, firstname, lastname, user_to_modify, role=SYSTEM_ADMIN)
+    if updated:
+        print("Profile updated successfully.")
+    else:
+        print("Failed to update profile. Please check the input data.")
 
 def reset_password_system_admin():
     clear()
