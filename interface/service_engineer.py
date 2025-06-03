@@ -60,7 +60,7 @@ def search_scooter():
     input_param = input("Search Parameter (Brand, Model, Serial Number, etc.): ")
     scooter_result = read_scooter_info(input_param)
     print(scooter_result)
-    print("Search completed. Check the logs for details.")
+    print("Search completed.")
 
 def update_password(username):
     clear()

@@ -10,6 +10,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     
+    username = username.lower()
     password = hash_password(password)
 
     cursor.execute('''
@@ -30,7 +31,7 @@ def read_users() -> list:
     cursor = conn.cursor()
 
     query = '''
-        SELECT * FROM users
+        SELECT id, username, first_name, role, last_name, register_date FROM users
     '''
     cursor.execute(query)
     users = cursor.fetchall()

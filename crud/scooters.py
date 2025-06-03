@@ -132,6 +132,12 @@ def delete_scooter_info(serial_number) -> bool:
     return True
 
 def read_scooter_info(search_param) -> list:
+    if len(search_param) < 50:
+        pass
+    else:
+        print("Search parameter is too long. Please enter a shorter term.")
+        return []
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -140,17 +146,17 @@ def read_scooter_info(search_param) -> list:
         WHERE brand LIKE ?
         OR model LIKE ?
         OR serial_number LIKE ?
-        OR top_speed LIKE ?
-        OR battery_capacity LIKE ?
-        OR state_of_charge LIKE ?
-        OR target_range_soc LIKE ?
+        OR CAST(top_speed AS TEXT) LIKE ?
+        OR CAST(battery_capacity AS TEXT) LIKE ?
+        OR CAST(state_of_charge AS TEXT) LIKE ?
+        OR CAST(target_range_soc AS TEXT) LIKE ?
         OR location LIKE ?
-        OR out_of_service LIKE ?
-        OR mileage LIKE ?
+        OR CAST(out_of_service AS TEXT) LIKE ?
+        OR CAST(mileage AS TEXT) LIKE ?
         OR last_maintenance_date LIKE ?
     '''
     search_term = f"%{search_param}%"
-    cursor.execute(query, [search_term] * 13)
+    cursor.execute(query, [search_term] * 11)
     scooters = cursor.fetchall()
     
     conn.close()
