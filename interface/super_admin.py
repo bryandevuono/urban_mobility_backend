@@ -6,13 +6,12 @@ sys.path.insert(0, '../')
 from constants import *
 import sys
 sys.path.insert(0, '../crud')
-from users import create_user, delete_user, update_profile_admin, reset_password, read_users
+from users import create_user, delete_user, update_profile, reset_password, read_users    
 
 clear = lambda: os.system('cls')
 
 def menu():
     print("Welcome to the Backend System, super admin!")
-    # service_engineer 'inheritance'
     print("1: Update the attributes of scooters in the system")
     print("2: Search and retrieve the information of a scooter")
     print("3: Update your password")
@@ -104,7 +103,7 @@ def change_profile_system_admin():
     firstname = input("firstname:")
     lastname = input("lastname:")
     user_to_modify = input("user to modify:")
-    update_profile_admin(username, firstname, lastname, user_to_modify, SYSTEM_ADMIN)
+    update_profile(username, firstname, lastname, user_to_modify, SYSTEM_ADMIN)
 
 def reset_password_system_admin():
     clear()

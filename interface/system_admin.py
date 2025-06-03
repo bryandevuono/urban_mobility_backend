@@ -7,7 +7,7 @@ from constants import *
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
-from users import create_user, delete_user, update_profile_service_engineer, reset_password, read_users
+from users import create_user, delete_user, update_profile, reset_password, read_users
 from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
 
 # TODO: add validation for inputs
@@ -220,13 +220,11 @@ def change_traveller():
     print("Traveller updated successfully!")
     
 def change_profile_service_engineer():
-    print("Enter the username of the service engineer you want to modify:")
-
-    username = input()
+    user_to_modify = input("Enter the username of the service engineer you want to modify:")
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
-    user_to_modify = input("Username of the service engineer to modify: ")
-    update_profile_service_engineer(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
+    username = input("New username of the service engineer to modify: ")
+    update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
 
 def reset_password_service_engineer():
     clear()

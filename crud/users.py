@@ -109,11 +109,10 @@ def modify_password(old_password, password_input, username) -> bool:
     conn.close()
     return True
 
-def update_profile_service_engineer(username, firstname, lastname, user_to_modify, role) -> bool:
+def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     # Validate the input data
     validators = [
         validate_username(username),
-        validate_username(user_to_modify),
         validate_name(firstname),
         validate_name(lastname)
     ]
@@ -133,9 +132,13 @@ def update_profile_service_engineer(username, firstname, lastname, user_to_modif
             last_name = ?
         WHERE username = ?
         AND role = ?
-    ''', (username, firstname, lastname, user_to_modify, role))
-
+    ''', (user_to_modify, firstname, lastname, username, role))
     conn.commit()
+    # Check if the update was successful
+    if cursor.rowcount == 0:
+        print("No user found with the specified username and role.")
+        conn.close()
+        return False
     conn.close()
     return True
 
