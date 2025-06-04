@@ -9,6 +9,9 @@ sys.path.insert(0, '../crud')
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
 from users import create_user, delete_user, update_profile, reset_password, read_users
 from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
+sys.path.insert(0, '../database')
+
+from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
 
 # clear = lambda: os.system('cls')
 clear = lambda: print('------------------------------------------------------------------------------\n')
@@ -269,3 +272,28 @@ def update_scooter_attr_admin():
         print("Scooter info updated!")
     else:
         print("Something went wrong while trying to update...")
+
+def backup_menu(role):
+    clear()
+    while True:
+        print("------------ Backup Menu ------------")
+        print("1: Create a backup of the database")
+        print("2: Restore the database from a backup")
+        if role == SUPER_ADMIN:
+            print("3: Allow a specific System Administrator to restore a specific backup.")
+            print("4: To revoke a previously generated restore-code for a System Administrator.")
+        
+        option = input("Please select an option (1-4): ")
+        if option == "1":
+            backup_database()
+        elif option == "2":
+            restore_database()
+        elif option == "3" and role == SUPER_ADMIN:
+            print("Enter the username of the admin who will be allowed to restore:")
+            admin_username = input("Username: ")
+            restore_code = create_restore_code(admin_username)
+            print(f"restore_code: {restore_code}")
+        elif option == "4" and  role == SUPER_ADMIN:
+            revoke_restore_code()
+        else:
+            print("Invalid option. Please try again.")

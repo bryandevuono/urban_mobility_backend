@@ -7,6 +7,7 @@ from constants import *
 import sys
 sys.path.insert(0, '../crud')
 from users import create_user, delete_user, update_profile, reset_password, read_users    
+sys.path.insert(0, '../database')
 
 # clear = lambda: ('cls')
 clear = lambda: print('------------------------------------------------------------------------------\n')
@@ -61,8 +62,7 @@ def menu():
         "17": add_system_admin,
         "18": change_profile_system_admin,
         "19": delete_system_admin,
-        "20": reset_password_system_admin,
-        "21": backup_menu
+        "20": reset_password_system_admin
     }
 
     while True:
@@ -70,19 +70,13 @@ def menu():
         if choice.lower() == "e":
             print("Exiting the backend system. Goodbye!")
             break
+        elif choice == "21":
+            backup_menu(SUPER_ADMIN)
         elif choice in options:
             print(f"You selected option {choice}.")
             options[choice]()
         else:
             print("Invalid choice. Please try again.")
-
-def backup_menu():
-    clear()
-    print("------------ Backup Menu ------------")
-    print("1: Create a backup of the database")
-    print("2: Restore the database from a backup")
-    print("3: Allow a specific System Administrator to restore a specific backup.")
-    print("4: To revoke a previously generated restore-code for a System Administrator.")
 
 def add_system_admin():
     clear()

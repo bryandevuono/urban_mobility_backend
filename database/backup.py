@@ -37,22 +37,21 @@ def create_restore_code(admin_username) -> str:
     cursor = conn.cursor()
     cursor.execute("SELECT role FROM users WHERE username = ?", (admin_username,))
     result = cursor.fetchone()
-
-    if result == 'system_admin':
+    if result[0] == 'system_admin':
         #genetate a restore code
         restore_code = os.urandom(16).hex()
         expiration_date = datetime.now() + timedelta(days=1) 
         #place it in the database
-        cursor.execute("INSERT INTO backup_code (code, username, used, expiration_date, created_at) VALUES (?, ?, ?, ?, ?)", 
+        cursor.execute("INSERT INTO backup_codes (code, username, used, expiration_date, created_at) VALUES (?, ?, ?, ?, ?)", 
                        (restore_code, admin_username, False, expiration_date, datetime.now()))
         #display the restore code
         conn.commit()
         conn.close()
         return restore_code
     else:
-        print("User is not an admin.")
+        print("User is not found.")
         conn.close()
-        return None
+        return ""
 
 def revoke_restore_code(restore_code) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
