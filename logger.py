@@ -80,7 +80,7 @@ class logmanager:
                         line[2] = ast.literal_eval(line[2])
                         print(str(line[0]), "- ", end="")
                         print(str(line[1]), "- ", end="")
-                        print(decrypt_data(private_key(), line[2]))
+                        
 
 
                     print(f"\n--- Page {page + 1} / {pages} ---\n")

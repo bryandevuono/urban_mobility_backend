@@ -42,7 +42,7 @@ def menu():
     print("Please select an option (0-20):")
 
     options = {
-        "1": update_scooter_attr,
+        "1": update_scooter_attr_admin,
         "2": search_scooter,
         # "3": update_password, # This is not implemented in the super admin menu
         "4": display_users,

@@ -34,7 +34,7 @@ def menu(username):
     print("16: Search and retrieve the information of a Traveller")
 
     options = {
-        '1': update_scooter_attr,
+        '1': update_scooter_attr_admin,
         '2': search_scooter,
         '3': update_password,
         '4': display_users,
@@ -246,3 +246,26 @@ def reset_password_service_engineer():
     username = input()    
     new_password = reset_password(username, SERVICE_ENGINEER)
     print(new_password)
+
+def update_scooter_attr_admin():
+    # the data to update a scooter is limited for a service engineer
+    clear()
+    print("Enter scooter information to update:")
+    serial_number = input("Serial Number: ")
+    brand = input("Brand: ")
+    model = input("Model: ")
+    top_speed = input("Top Speed (km/h): ")
+    battery_capacity = input("Battery Capacity (Wh): ")
+    state_of_charge = input("State of Charge (%): ")
+    target_range_soc = input("Target Range at SOC (%): ")
+    location = input("Location: ")
+    out_of_service = input("Out of Service (0/1): ")
+    mileage = input("Mileage (km): ")
+    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
+
+    updated = update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,state_of_charge,target_range_soc,
+                                location,out_of_service,mileage,last_maintenance_date)
+    if updated:
+        print("Scooter info updated!")
+    else:
+        print("Something went wrong while trying to update...")

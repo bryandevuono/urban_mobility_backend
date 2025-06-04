@@ -34,13 +34,9 @@ def menu(username):
             print("Invalid choice. Please try again.")
 
 def update_scooter_attr():
+    # the data to update a scooter is limited for a service engineer
     clear()
     print("Enter scooter information to update:")
-    serial_number = input("Serial Number: ")
-    brand = input("Brand: ")
-    model = input("Model: ")
-    top_speed = input("Top Speed (km/h): ")
-    battery_capacity = input("Battery Capacity (Wh): ")
     state_of_charge = input("State of Charge (%): ")
     target_range_soc = input("Target Range at SOC (%): ")
     location = input("Location: ")
@@ -48,8 +44,8 @@ def update_scooter_attr():
     mileage = input("Mileage (km): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
 
-    updated = update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,state_of_charge,target_range_soc,
-                                location,out_of_service,mileage,last_maintenance_date)
+    updated = update_scooter_info(serial_number=None, brand=None, model=None, top_speed=None,battery_capacity=None,state_of_charge=state_of_charge,target_range_soc=target_range_soc,
+                                location=location,out_of_service=out_of_service,mileage=mileage,last_maintenance_date=last_maintenance_date)
     if updated:
         print("Scooter info updated!")
     else:
