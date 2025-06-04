@@ -287,7 +287,15 @@ def backup_menu(role):
         if option == "1":
             backup_database()
         elif option == "2":
-            restore_database()
+            print("Enter the restore code:")
+            restore_code = input("Restore Code: ")
+            print("Enter the path to the backup file:")
+            backup_filename = input("Backup Filename: ")
+            restored = restore_database(backup_filename, restore_code)
+            if restored:
+                print("Database restored successfully!")
+            else:
+                print("Failed to restore the database. Please check the restore code and backup file.")
         elif option == "3" and role == SUPER_ADMIN:
             print("Enter the username of the admin who will be allowed to restore:")
             admin_username = input("Username: ")

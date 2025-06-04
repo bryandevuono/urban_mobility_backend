@@ -3,20 +3,20 @@ import os
 import sqlite3
 from datetime import datetime, timedelta
 
-# TODO: implement role check for backing up and restoring the database
-# TODO: restore database from backup refine
+#TODO: duplicate codes for admins???
 
 def backup_database() -> bool:
-    db_path = "database/urban_mobility.db"
-    if not os.path.exists(db_path):
-        print(f"Database file '{db_path}' not found.")
-        return
-    
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    db_path = "../database/urban_mobility.db"
+    backup_dir = "../database/backups"
 
+    if not os.path.exists(backup_dir):
+        os.makedirs(backup_dir)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_filename = f"{timestamp}_backup.zip"
-    with zipfile.ZipFile("./database/backups/" + backup_filename, mode='w') as zf:
-        zf.write("./database")
+    backup_zip_path = os.path.join(backup_dir, backup_filename)
+    with zipfile.ZipFile(backup_zip_path, mode='w') as zf:
+        zf.write(db_path, arcname=os.path.basename(db_path))
 
     print(f"Backup created: {backup_filename}")
     return True
@@ -24,15 +24,29 @@ def backup_database() -> bool:
 def restore_database(backup_filename, restore_code) -> bool:
     if len(backup_filename) > 0 and len(backup_filename) < 40:
         pass
-    backup_path = f"./database/backups/{backup_filename}"
-    if not os.path.exists(backup_path):
-        print(f"Backup file '{backup_filename}' not found.")
-        return
-    
-    with zipfile.ZipFile(backup_path, mode='r') as zf:
-        zf.extractall("./database")
+    else:
+        print("Backup filename must be between 1 and 40 characters long.")
+        return False
+    #check if the restore_code is valid
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ?", (restore_code, False))
 
-    print(f"Database restored from backup: {backup_filename}")
+    backup_dir = "../database/backups"
+    backup_path = os.path.join(backup_dir, backup_filename)
+    if not os.path.isfile(backup_path):
+        print("Backup file not found.")
+        return False
+
+    with zipfile.ZipFile(backup_path, 'r') as zipf:
+        zipf.extract('urban_mobility.db', path='../database')
+
+    print(f"Backup {backup_filename} restored.")
+    #mark the restore code as used
+    cursor.execute("UPDATE backup_codes SET used = TRUE WHERE code = ?", (restore_code,))
+    conn.commit()
+    conn.close()
+    
     return True
 
 def create_restore_code(admin_username) -> str:
@@ -80,7 +94,8 @@ def revoke_restore_code(username) -> bool:
     else:
         print("Restore code not found.")
         return False
-    
+
+#TODO: check if the user and code match
 def check_restore_code(restore_code) -> bool:
     if len(restore_code) > 0 and len(restore_code) < 40:
         pass
@@ -95,13 +110,15 @@ def check_restore_code(restore_code) -> bool:
     expiration_date = datetime.strptime(result[3], '%Y-%m-%d %H:%M:%S.%f')
 
     if result and datetime.now() > expiration_date:
-        cursor.execute("UPDATE backup_codes SET used = ? WHERE code = ?", (True, restore_code))
+        conn.close()
         print("Restore code is valid.")
         return True
     elif datetime.now() > expiration_date:
         print("Restore code has expired.")
+        conn.close()
         return False
     else:
+        conn.close()
         print("Invalid or already used restore code.")
         return False
     
