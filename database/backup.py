@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime, timedelta
 
 # TODO: implement role check for backing up and restoring the database
-# TODO: buffer overflow prevention 
+# TODO: restore database from backup refine
 
 def backup_database() -> bool:
     db_path = "database/urban_mobility.db"
@@ -21,7 +21,9 @@ def backup_database() -> bool:
     print(f"Backup created: {backup_filename}")
     return True
 
-def restore_database(backup_filename) -> bool:
+def restore_database(backup_filename, restore_code) -> bool:
+    if len(backup_filename) > 0 and len(backup_filename) < 40:
+        pass
     backup_path = f"./database/backups/{backup_filename}"
     if not os.path.exists(backup_path):
         print(f"Backup file '{backup_filename}' not found.")
