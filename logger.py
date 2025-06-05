@@ -1,4 +1,5 @@
 import sqlite3
+from encryption.symmetric import encrypt_message, decrypt_message
 
 def create_logging_table(db_path='logging.db'):
     conn = sqlite3.connect(db_path)
@@ -16,7 +17,7 @@ def create_logging_table(db_path='logging.db'):
     conn.commit()
     conn.close()
 
-def log_event(username, description, suspicious, db_path='logging.db'):
+def log_event(username, description, suspicious, db_path='../logging.db'):
     from datetime import datetime
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -27,7 +28,7 @@ def log_event(username, description, suspicious, db_path='logging.db'):
     cursor.execute('''
         INSERT INTO logging (date, time, username, description, suspicious)
         VALUES (?, ?, ?, ?, ?)
-    ''', (date_str, time_str, username, description, suspicious))
+    ''', (encrypt_message(date_str), encrypt_message(time_str), encrypt_message(username), encrypt_message(description), encrypt_message(suspicious)))
     
     conn.commit()
     conn.close()
@@ -35,13 +36,11 @@ def log_event(username, description, suspicious, db_path='logging.db'):
 def read_logs(db_path='../logging.db') -> None:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM logging')
+    cursor.execute('SELECT date, time, username, description, suspicious FROM logging')
     logs = cursor.fetchall()
     conn.close()
     print("Logging Records:")
     for log in logs:
-        print(f"ID: {log[0]}, Date: {log[1]}, Time: {log[2]}, Username: {log[3]}, Description: {log[4]}, Suspicious: {'Yes' if log[5] else 'No'}")
-
-if __name__ == "__main__":
-    create_logging_table()
-    print("Logging table created (if not exists).")
+        print(f"Date: {decrypt_message(log[0])}, \
+              Time: {decrypt_message(log[1])}, Username: {decrypt_message(log[2])}, \
+              Description: {decrypt_message(log[3])}, Suspicious: {'Yes' if decrypt_message(log[4]) else 'No'}")

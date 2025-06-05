@@ -3,12 +3,13 @@ import sys
 from super_admin import menu as super_admin_menu
 from getpass import getpass
 sys.path.insert(0, '../auth')
-
 from login import authenticate_user 
-
+sys.path.insert(0, '../')
+from logger import log_event
 clear = lambda: os.system('cls')
 
 def welcome_screen():
+    log_event("system", "User has entered the welcome screen", "0")
     while True:
         print("Welcome to the urban mobility system\n"
            "Choose an option:\n"
