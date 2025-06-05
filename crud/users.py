@@ -49,16 +49,14 @@ def create_user(username, password, firstname, lastname, role) -> bool:
 def read_users() -> list:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-
     query = '''
         SELECT id, username, first_name, role, last_name, register_date FROM users
     '''
     cursor.execute(query)
-    users = cursor.fetchall() 
+    users = [list(row) for row in cursor.fetchall()]
     conn.close()
     for user in users:
         # Decrypt the username
-        user = list(user)
         user[1] = decrypt_message(user[1])
     return users
 
@@ -76,7 +74,7 @@ def delete_user(id, role) -> bool:
     cursor.execute('''
         DELETE FROM users
         WHERE id = ? AND role = ?
-    ''', (encrypt_message(int(id)), role))
+    ''', ((int(id)), role))
 
     conn.commit()
     conn.close()
@@ -91,6 +89,7 @@ def modify_password(old_password, password_input, username) -> bool:
         SELECT password FROM users
         WHERE username = ?
     ''', (username,))
+    
     result = cursor.fetchone()
 
     if check_password(old_password, result[0]):
@@ -144,6 +143,7 @@ def update_profile(username, firstname, lastname, id, role) -> bool:
         WHERE id = ?
         AND role = ?
     ''', (encrypt_message(username), firstname, lastname, int(id), role))
+    print("Updating profile for user with ID:", id)
     # Check if the update was successful
     if cursor.rowcount == 0:
         print("No user found with the specified username/role.")

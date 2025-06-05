@@ -45,7 +45,7 @@ def menu(username):
         options = {
             '1': update_scooter_attr_admin,
             '2': search_scooter,
-            '3': update_password,
+            '3': lambda: update_password(username),
             '4': display_users,
             '5': add_service_engineer,
             '6': change_profile_service_engineer,
@@ -255,7 +255,7 @@ def change_profile_service_engineer():
     clear()
     display_users()
     print("Enter the user_id of the service engineer you want to modify (see overview):")
-    id = input("Enter the username of the service engineer you want to modify:")
+    id = input("Enter the ID:")
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
     username = input("New username of the service engineer to modify: ")

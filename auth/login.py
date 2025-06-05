@@ -6,16 +6,19 @@ import system_admin
 import system_admin
 import super_admin
 import sqlite3
+sys.path.insert(0, '../encryption')
+from symmetric import encrypt_message, decrypt_message
 
-def authenticate_user(username, password):
+def authenticate_user(username_input, password):
     #validate input (required, length format)
-    if len(username) > 0 and len(password) > 0 and len(username) <= 12 and len(password) <= 13:
+    if len(username_input) > 0 and len(password) > 0 and len(username_input) <= 12 and len(password) <= 30:
         pass
     else:
         print("Username and password cannot be empty or too long (12 characters).")
         return False
+    
     #hard-coded
-    if username == "super_admin" and password == "Admin123?":
+    if username_input == "super_admin" and password == "Admin123?":
         super_admin.menu()
         return True
     
@@ -23,26 +26,34 @@ def authenticate_user(username, password):
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT password, role, username FROM users
-        WHERE username = ?
-    ''', (username,))
-    result = cursor.fetchone()
+        SELECT username, id, password, role
+        FROM users
+    ''')
+    users = cursor.fetchall()
+    username = ""
+    password_db = ""
+    role = ""
+    for user in users:
+        if decrypt_message(user[0]) == username_input:
+            username = decrypt_message(user[0])
+            password_db = user[2]
+            role = user[3]
     conn.close()
 
     #check password
     authenticated = False
-    if result:
-        authenticated = check_password(password ,result[0])
+    if username:
+        authenticated = check_password(password, password_db)
     else:
         print("Username does not exist.")
         return False
     
     # redirect to the correct menu based on role
-    if authenticated and result[1] == "service_engineer":
-        service_engineer.menu(result[2])
+    if authenticated and role == "service_engineer":
+        service_engineer.menu()
         return True
-    elif authenticated and result[1] == "system_admin":
-        system_admin.menu(result[2])
+    elif authenticated and role == "system_admin":
+        system_admin.menu(username)
         return True
     else:
         print("Incorrect password.")
