@@ -2,6 +2,8 @@ import sqlite3
 import sys
 sys.path.insert(0, '../validation')
 from traveller_data import validate_name, validate_gender, validate_birthday, validate_house_number, validate_zip_code, validate_city, validate_email, validate_phone_number_nl, validate_driver_license_number
+sys.path.insert(0, '../encryption')
+from symmetric import encrypt_message, decrypt_message
 
 def create_traveller(firstname, lastname, birthday, gender, streetname, house_number, 
                     zip_code, city, email_address, mobile_phone, driving_license_number)-> bool:
@@ -32,7 +34,7 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
             first_name, last_name, birthday, gender, street_name, house_number, zip_code, city, email_address, mobile_phone, driving_license_number
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (firstname, lastname, birthday, gender, streetname, house_number, zip_code, city, email_address, mobile_phone, driving_license_number)
+        ''', (firstname, lastname, birthday, gender, encrypt_message(streetname), house_number, zip_code, city, email_address, encrypt_message(mobile_phone), driving_license_number)
         )
 
     conn.commit()

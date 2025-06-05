@@ -7,7 +7,7 @@ def validate_name(name):
         return False
     
 def validate_gender(gender):
-    if gender in ['M', 'F', 'O']:
+    if gender.upper() in ['M', 'F', 'O']:
         return True
     else:
         print("Please enter a valid gender option ('M', 'F', or 'O').")

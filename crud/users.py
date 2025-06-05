@@ -7,6 +7,8 @@ sys.path.insert(0, '../validation')
 from account_data import validate_username, validate_password, validate_name
 sys.path.insert(0, '../auth')
 from hash import hash_password, check_password
+sys.path.insert(0, '../encryption')
+from symmetric import encrypt_message, decrypt_message
 
 def create_user(username, password, firstname, lastname, role) -> bool:
     validators = [
@@ -33,7 +35,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
                 username, password, first_name, last_name, role, register_date
             )
             VALUES (?, ?, ?, ?, ?, ?)
-            ''', (username, password, firstname, lastname, role, datetime.now())
+            ''', (encrypt_message(username), password, firstname, lastname, role, datetime.now())
             )
 
         conn.commit()

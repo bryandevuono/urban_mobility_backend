@@ -36,11 +36,15 @@ def log_event(username, description, suspicious, db_path='../logging.db'):
 def read_logs(db_path='../logging.db') -> None:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute('SELECT date, time, username, description, suspicious FROM logging')
+    cursor.execute('SELECT * FROM logging')
     logs = cursor.fetchall()
     conn.close()
     print("Logging Records:")
+    print("ID | Date | Time | Username | Description | Suspicious")
+    log_counter = 0
     for log in logs:
-        print(f"Date: {decrypt_message(log[0])}, \
-              Time: {decrypt_message(log[1])}, Username: {decrypt_message(log[2])}, \
-              Description: {decrypt_message(log[3])}, Suspicious: {'Yes' if decrypt_message(log[4]) else 'No'}")
+        print(f"ID: {log_counter}, Date: {decrypt_message(log[1])}, \
+              Time: {decrypt_message(log[2])}, Username: {decrypt_message(log[3])}, \
+              Description: {decrypt_message(log[4])}, Suspicious: {'Yes' if decrypt_message(log[5]) else 'No'}")
+        log_counter += 1
+    

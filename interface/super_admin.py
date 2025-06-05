@@ -94,7 +94,11 @@ def delete_system_admin():
     clear()
     print("Give the username of the user you want to delete:")
     username = input("username:")
-    delete_user(username, SYSTEM_ADMIN)
+    deleted = delete_user(username, SYSTEM_ADMIN)
+    if deleted:
+        print("System admin deleted successfully.")
+    else:
+        print("Failed to delete system admin. Please check the username.")
 
 def change_profile_system_admin():
     clear()

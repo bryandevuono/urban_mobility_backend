@@ -150,7 +150,11 @@ def add_service_engineer():
     role = SERVICE_ENGINEER
     first_name = input("first_name:")
     last_name = input("last_name:")
-    create_user(username, password, first_name, last_name, role)
+    created = create_user(username, password, first_name, last_name, role)
+    if created:
+        print("Service Engineer created successfully.")
+    else:
+        print("Failed to create Service Engineer. Please check the input data.")
 
 def display_users():
     clear()
@@ -173,19 +177,23 @@ def delete_service_engineer():
 def add_traveller():
     clear()
     print("Enter the info of the new traveller:")
-    first_name = input("firstname:")
-    last_name = input("lastname:")
-    birth_date = input("birth_date (YYYY-MM-DD):")
-    email = input("email:")
-    phone_number = input("phone_number:")
+    firstname = input("firstname:")
+    lastname = input("lastname:")
+    birthday = input("birth_date (YYYY-MM-DD):")
+    email_address = input("email:")
+    mobile_phone = input("phone_number:")
     gender = input("Gender (M/F):")
     streetname = input("Street Name:")
     house_number = input("Street Number:")
     zip_code = input("Zip Code (XXXXDD):")
     city = input("City ('Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere', 'Breda', 'Nijmegen'):")
     driving_license_number = input("Driving License Number:")
-    create_traveller(first_name, last_name, birth_date, email, phone_number, gender, streetname, 
-                house_number, zip_code, city, driving_license_number)
+    created = create_traveller(firstname, lastname, birthday, gender, streetname, house_number, 
+                            zip_code, city, email_address, mobile_phone, driving_license_number)
+    if created:
+        print("Traveller created successfully.")
+    else:
+        print("Failed to create Traveller. Please check the input data and ensure all fields are valid.")
 
 def delete_traveller():
     clear()
@@ -248,7 +256,11 @@ def change_profile_service_engineer():
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
     username = input("New username of the service engineer to modify: ")
-    update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
+    updated = update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
+    if updated:
+        print(f"Service Engineer {user_to_modify} updated successfully!")
+    else:
+        print(f"Failed to update Service Engineer {user_to_modify}. Please check the input data and ensure the username is valid.")
 
 def reset_password_service_engineer(username):
     clear()
