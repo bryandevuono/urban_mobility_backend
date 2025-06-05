@@ -1,15 +1,15 @@
 import os
 from cryptography.fernet import Fernet
 
-KEY_FILE = "../encryption/secret.key"
+key_file = "../encryption/secret.key"
 
 def load_or_create_key():
-    if not os.path.exists(KEY_FILE):
+    if not os.path.exists(key_file):
         key = Fernet.generate_key()
-        with open(KEY_FILE, "wb") as f:
+        with open(key_file, "wb") as f:
             f.write(key)
     else:
-        with open(KEY_FILE, "rb") as f:
+        with open(key_file, "rb") as f:
             key = f.read()
     return key
 

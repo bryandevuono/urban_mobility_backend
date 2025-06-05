@@ -51,7 +51,7 @@ def menu(username):
             '6': change_profile_service_engineer,
             '7': delete_service_engineer,
             '8': lambda: reset_password_service_engineer(username),
-            '9': see_logs,  # TODO: Implement view backend system logs
+            '9': see_logs,
             '10': add_traveller,
             '11': change_traveller,
             '12': delete_traveller,
@@ -275,17 +275,17 @@ def update_scooter_attr_admin():
     # the data to update a scooter is limited for a service engineer
     clear()
     print("Enter scooter information to update:")
-    serial_number = input("Serial Number: ")
-    brand = input("Brand: ")
+    serial_number = input("Serial Number (Leave blank to keep current): ")
+    brand = input("Brand (Leave blank to keep current): ")
     model = input("Model: ")
-    top_speed = input("Top Speed (km/h): ")
-    battery_capacity = input("Battery Capacity (Wh): ")
-    state_of_charge = input("State of Charge (%): ")
-    target_range_soc = input("Target Range at SOC (%): ")
-    location = input("Location: ")
-    out_of_service = input("Out of Service (0/1): ")
-    mileage = input("Mileage (km): ")
-    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
+    top_speed = input("Top Speed (km/h) (Leave blank to keep current): ")
+    battery_capacity = input("Battery Capacity (Wh) (Leave blank to keep current): ")
+    state_of_charge = input("State of Charge (%) (Leave blank to keep current): ")
+    target_range_soc = input("Target Range at SOC (%) (Leave blank to keep current): ")
+    location = input("Location: (Leave blank to keep current)")
+    out_of_service = input("Out of Service (0/1) (Leave blank to keep current): ")
+    mileage = input("Mileage (km) (Leave blank to keep current): ")
+    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD) (Leave blank to keep current): ")
 
     updated = update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,state_of_charge,target_range_soc,
                                 location,out_of_service,mileage,last_maintenance_date)
