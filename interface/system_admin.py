@@ -36,6 +36,9 @@ def menu(username):
         print("14: Update the information of a scooter")
         print("15: Delete a scooter from the backend system")
         print("16: Search and retrieve the information of a Traveller")
+        print("17: Backup and restore the database")
+        print("E: Exit the system")
+        print("------------------------------------------------------------------------------")
 
         options = {
             '1': update_scooter_attr_admin,
@@ -45,7 +48,7 @@ def menu(username):
             '5': add_service_engineer,
             '6': change_profile_service_engineer,
             '7': delete_service_engineer,
-            '8': reset_password_service_engineer(username),
+            '8': lambda: reset_password_service_engineer(username),
             '9': "",  # TODO: Implement view backend system logs
             '10': add_traveller,
             '11': change_traveller,
@@ -245,7 +248,7 @@ def change_profile_service_engineer():
     username = input("New username of the service engineer to modify: ")
     update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
 
-def reset_password_service_engineer():
+def reset_password_service_engineer(username):
     clear()
     print("Enter the username of the service engineer whose password you want to reset:")
     username = input()    

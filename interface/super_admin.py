@@ -63,15 +63,14 @@ def menu():
             "17": add_system_admin,
             "18": change_profile_system_admin,
             "19": delete_system_admin,
-            "20": reset_password_system_admin
+            "20": reset_password_system_admin,
+            "21": backup_menu(SUPER_ADMIN, SUPER_ADMIN)
         }
 
         choice = input("Please enter your choice: ")
         if choice.lower() == "e":
             print("Exiting the backend system. Goodbye!")
             break
-        elif choice == "21":
-            backup_menu(SUPER_ADMIN, SUPER_ADMIN)
         elif choice in options:
             print(f"You selected option {choice}.")
             options[choice]()

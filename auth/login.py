@@ -9,7 +9,7 @@ import sqlite3
 
 def authenticate_user(username, password):
     #validate input (required, length format)
-    if len(username) > 0 and len(password) > 0 and len(username) <= 12 and len(password) <= 12:
+    if len(username) > 0 and len(password) > 0 and len(username) <= 12 and len(password) <= 13:
         pass
     else:
         print("Username and password cannot be empty or too long (12 characters).")
