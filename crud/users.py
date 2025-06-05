@@ -54,27 +54,29 @@ def read_users() -> list:
         SELECT id, username, first_name, role, last_name, register_date FROM users
     '''
     cursor.execute(query)
-    users = cursor.fetchall()
-    
+    users = cursor.fetchall() 
     conn.close()
-    
+    for user in users:
+        # Decrypt the username
+        user = list(user)
+        user[1] = decrypt_message(user[1])
     return users
 
-def delete_user(username, role) -> bool:
+def delete_user(id, role) -> bool:
     # Validate the username and role
-    if validate_username(username):
+    if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
-        print("Invalid username length. It should be between 8 and 10 characters.")
+        print("Invalid Id.")
         return False
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-
+    
     cursor.execute('''
         DELETE FROM users
-        WHERE username = ? AND role = ?
-    ''', (username, role))
+        WHERE id = ? AND role = ?
+    ''', (encrypt_message(int(id)), role))
 
     conn.commit()
     conn.close()
@@ -112,13 +114,13 @@ def modify_password(old_password, password_input, username) -> bool:
         UPDATE users
         SET password = ?
         WHERE username = ?
-    ''', (new_hashed_password, username))
+    ''', (new_hashed_password, encrypt_message(username)))
 
     conn.commit()
     conn.close()
     return True
 
-def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
+def update_profile(username, firstname, lastname, id, role) -> bool:
     # Validate the input data
     validators = [
         validate_username(username),
@@ -139,9 +141,9 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
         SET username = ?,
             first_name = ?,
             last_name = ?
-        WHERE username = ?
+        WHERE id = ?
         AND role = ?
-    ''', (username, firstname, lastname, user_to_modify, role))
+    ''', (encrypt_message(username), firstname, lastname, int(id), role))
     # Check if the update was successful
     if cursor.rowcount == 0:
         print("No user found with the specified username/role.")
@@ -151,11 +153,13 @@ def update_profile(username, firstname, lastname, user_to_modify, role) -> bool:
     conn.close()
     return True
 
-def reset_password(username, role) -> str:
-    if validate_username(username):
+def reset_password(id, role) -> str:
+    if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
-        return "Invalid username length. It should be between 8 and 10 characters."
+        print("Invalid Id.")
+        return False
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
 
@@ -169,9 +173,9 @@ def reset_password(username, role) -> str:
     cursor.execute('''
         UPDATE users
         SET password = ?
-        WHERE username = ?
+        WHERE id = ?
         AND role = ?
-    ''', (hashed_password, username, role))
+    ''', (hashed_password, int(id), role))
     
     conn.commit()
 

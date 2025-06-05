@@ -166,13 +166,14 @@ def display_users():
 
 def delete_service_engineer():
     clear()
-    print("Enter the username of the service engineer you want to delete:")
-    username = input()
-    deleted = delete_user(username, "service_engineer")
+    display_users()
+    print("Enter the user_id of the service engineer you want to delete (see overview):")
+    id = input()
+    deleted = delete_user(id, "service_engineer")
     if deleted:
-        print(f"Service Engineer {username} deleted successfully.")
+        print(f"Service Engineer deleted successfully.")
     else:
-        print(f"Service Engineer {username} not found or deletion failed.")
+        print(f"Service Engineer not found or deletion failed.")
 
 def add_traveller():
     clear()
@@ -252,21 +253,24 @@ def change_traveller():
     
 def change_profile_service_engineer():
     clear()
-    user_to_modify = input("Enter the username of the service engineer you want to modify:")
+    display_users()
+    print("Enter the user_id of the service engineer you want to modify (see overview):")
+    id = input("Enter the username of the service engineer you want to modify:")
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
     username = input("New username of the service engineer to modify: ")
-    updated = update_profile(username, firstname, lastname, user_to_modify, SERVICE_ENGINEER)
+    updated = update_profile(username, firstname, lastname, id, SERVICE_ENGINEER)
     if updated:
-        print(f"Service Engineer {user_to_modify} updated successfully!")
+        print(f"Service Engineer updated successfully!")
     else:
-        print(f"Failed to update Service Engineer {user_to_modify}. Please check the input data and ensure the username is valid.")
+        print(f"Failed to update Service Engineer. Please check the input data and ensure the username is valid.")
 
-def reset_password_service_engineer(username):
+def reset_password_service_engineer():
     clear()
-    print("Enter the username of the service engineer whose password you want to reset:")
-    username = input()    
-    new_password = reset_password(username, SERVICE_ENGINEER)
+    display_users()
+    print("Enter the user_id of the service engineer you want to reset (see overview):")
+    id = input()    
+    new_password = reset_password(id, SERVICE_ENGINEER)
     print(new_password)
 
 def update_scooter_attr_admin():

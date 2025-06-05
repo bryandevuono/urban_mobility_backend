@@ -90,11 +90,13 @@ def add_system_admin():
         print("System admin created successfully.")
     else:
         print("Failed to create system admin. Please check the input data.")
+
 def delete_system_admin():
     clear()
-    print("Give the username of the user you want to delete:")
-    username = input("username:")
-    deleted = delete_user(username, SYSTEM_ADMIN)
+    display_users()
+    print("Enter the user_id of the service engineer you want to delete (see overview):")
+    id = input("username:")
+    deleted = delete_user(id, SYSTEM_ADMIN)
     if deleted:
         print("System admin deleted successfully.")
     else:
@@ -102,12 +104,13 @@ def delete_system_admin():
 
 def change_profile_system_admin():
     clear()
+    display_users()
+    id = input("user to modify (ID):")
     print("Enter the info of the system admin you want to change:")
-    user_to_modify = input("user to modify:")
     username = input("username:")
     firstname = input("firstname:")
     lastname = input("lastname:")
-    updated = update_profile(username, firstname, lastname, user_to_modify, role=SYSTEM_ADMIN)
+    updated = update_profile(username, firstname, lastname, id, role=SYSTEM_ADMIN)
     if updated:
         print("Profile updated successfully.")
     else:
@@ -115,7 +118,8 @@ def change_profile_system_admin():
 
 def reset_password_system_admin():
     clear()
-    print("Enter the username of the admin whose password you want to reset:")
-    username = input()    
-    new_password = reset_password(username, SYSTEM_ADMIN)
+    display_users()
+    print("Enter the ID of the admin whose password you want to reset:")
+    id = input()    
+    new_password = reset_password(id, SYSTEM_ADMIN)
     print(new_password)
