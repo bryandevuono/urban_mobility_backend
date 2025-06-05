@@ -48,6 +48,7 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
 
     return True
 
+#TODO: refactor this function to leave things blank 1 > add things to query, 2 > only validate if not null
 def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,soc,target_range_soc,
                         location,out_of_service,mileage,last_maintenance_date) -> bool:
     # check if serial number exists

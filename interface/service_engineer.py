@@ -44,7 +44,7 @@ def update_scooter_attr():
     mileage = input("Mileage (km): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
 
-    updated = update_scooter_info(serial_number=None, brand=None, model=None, top_speed=None,battery_capacity=None,state_of_charge=state_of_charge,target_range_soc=target_range_soc,
+    updated = update_scooter_info(serial_number="", brand="", model="", top_speed="",battery_capacity="",state_of_charge=state_of_charge,target_range_soc=target_range_soc,
                                 location=location,out_of_service=out_of_service,mileage=mileage,last_maintenance_date=last_maintenance_date)
     if updated:
         print("Scooter info updated!")
