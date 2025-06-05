@@ -32,11 +32,11 @@ def restore_database(backup_filename, restore_code, admin_username) -> bool:
     if not os.path.isfile(backup_path):
         print("Backup file not found.")
         return False
-    #check if the restore_code is valid
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND username = ?", (restore_code, False, admin_username))
-    check_restore_code = cursor.rowcount > 0
+    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND username = ? and expiration_date > DATETIME('now')", 
+                   (restore_code, False, admin_username))
+    check_restore_code = cursor.fetchone()
     if admin_username == "super_admin" or check_restore_code:
         with zipfile.ZipFile(backup_path, 'r') as zipf:
             zipf.extract('urban_mobility.db', path='../database')
@@ -91,38 +91,10 @@ def revoke_restore_code(username) -> bool:
     result = cursor.fetchone()
     
     if result:
-        cursor.execute("UPDATE backup_codes SET used = TRUE WHERE code = ?", (username,))
+        cursor.execute("UPDATE backup_codes SET used = TRUE WHERE username = ?", (username,))
         conn.commit()
         print("Restore code revoked successfully.")
         return True
     else:
         print("Restore code not found.")
         return False
-
-#TODO: check if the user and code match
-def check_restore_code(restore_code) -> bool:
-    if len(restore_code) > 0 and len(restore_code) < 40:
-        pass
-    else:
-        print("Restore code must be between 1 and 40 characters long.")
-        return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ?", (restore_code, False))
-    result = cursor.fetchone()
-    expiration_date = datetime.strptime(result[3], '%Y-%m-%d %H:%M:%S.%f')
-
-    if result and datetime.now() > expiration_date:
-        conn.close()
-        print("Restore code is valid.")
-        return True
-    elif datetime.now() > expiration_date:
-        print("Restore code has expired.")
-        conn.close()
-        return False
-    else:
-        conn.close()
-        print("Invalid or already used restore code.")
-        return False
-    

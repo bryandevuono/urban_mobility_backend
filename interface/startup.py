@@ -1,6 +1,7 @@
 import os
 import sys
 from super_admin import menu as super_admin_menu
+from getpass import getpass
 sys.path.insert(0, '../auth')
 
 from login import authenticate_user 
@@ -33,7 +34,7 @@ def login_screen():
         clear()
         print("Please enter your username and password to log in.\n")
         username = input("Enter your username\n")
-        password = input("Enter your password\n")
+        password = getpass("Enter your password (input is hidden)\n")
         authenticate_user(username, password)
 
 welcome_screen()

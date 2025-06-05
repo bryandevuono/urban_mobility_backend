@@ -4,6 +4,7 @@ import os
 import sys
 sys.path.insert(0, '../')
 from constants import *
+from getpass import getpass
 sys.path.insert(0, '../crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
@@ -143,9 +144,9 @@ def delete_scooter():
 def add_service_engineer():
     clear()
     print("Enter the info of the new service engineer:")
-    username = input("Username:")
-    password = input("password:")
-    role = "service_engineer" # make const
+    username = input("Username (8-10 characters):")
+    password = getpass("password (Password must be between 12 and 30 characters long, contain at least one digit, one lowercase letter, one uppercase letter, and one special character.):")
+    role = SERVICE_ENGINEER
     first_name = input("first_name:")
     last_name = input("last_name:")
     create_user(username, password, first_name, last_name, role)
@@ -179,7 +180,7 @@ def add_traveller():
     gender = input("Gender (M/F):")
     streetname = input("Street Name:")
     house_number = input("Street Number:")
-    zip_code = input("Zip Code:")
+    zip_code = input("Zip Code (XXXXDD):")
     city = input("City ('Amsterdam', 'Rotterdam', 'The Hague', 'Utrecht', 'Eindhoven', 'Tilburg', 'Groningen', 'Almere', 'Breda', 'Nijmegen'):")
     driving_license_number = input("Driving License Number:")
     create_traveller(first_name, last_name, birth_date, email, phone_number, gender, streetname, 
@@ -310,7 +311,13 @@ def backup_menu(role, username):
             restore_code = create_restore_code(admin_username)
             print(f"restore_code: {restore_code}")
         elif option == "4" and  role == SUPER_ADMIN:
-            revoke_restore_code()
+            print("Enter the username of the admin whose restore code you want to revoke:")
+            admin_username = input("Username: ")
+            revoked = revoke_restore_code(admin_username)
+            if revoked:
+                print(f"Restore code for {admin_username} has been revoked successfully.")
+            else:
+                print(f"Failed to revoke restore code for {admin_username}.")
         elif option.lower() == "e":
             print("Exiting the backup menu.")
             break

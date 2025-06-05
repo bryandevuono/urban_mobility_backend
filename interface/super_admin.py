@@ -6,7 +6,7 @@ sys.path.insert(0, '../')
 from constants import *
 import sys
 sys.path.insert(0, '../crud')
-from users import create_user, delete_user, update_profile, reset_password, read_users    
+from users import create_user, delete_user, update_profile, reset_password    
 sys.path.insert(0, '../database')
 
 # clear = lambda: ('cls')
@@ -64,7 +64,7 @@ def menu():
             "18": change_profile_system_admin,
             "19": delete_system_admin,
             "20": reset_password_system_admin,
-            "21": backup_menu(SUPER_ADMIN, SUPER_ADMIN)
+            "21": lambda: backup_menu(SUPER_ADMIN, SUPER_ADMIN)
         }
 
         choice = input("Please enter your choice: ")
@@ -80,8 +80,8 @@ def menu():
 def add_system_admin():
     clear()
     print("Enter the info of the new system admin")
-    username = input("username:")
-    password = input("password:")
+    username = input("username (8-10 characters):")
+    password = getpass("password (Password must be between 12 and 30 characters long, contain at least one digit, one lowercase letter, one uppercase letter, and one special character.):")
     firstname = input("firstname:")
     lastname = input("lastname:")
     role = SYSTEM_ADMIN

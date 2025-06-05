@@ -1,5 +1,6 @@
 import os
 import sys
+from getpass import getpass
 sys.path.insert(0, '../crud')
 from scooters import update_scooter_info, read_scooter_info
 from users import modify_password
@@ -62,9 +63,9 @@ def search_scooter():
 def update_password(username):
     clear()
     print("Enter your old password:")
-    old_password = input("Enter you old password:")
+    old_password = getpass("Enter you old password:")
     print("Enter your new password:")
-    new_password = input("New Password: ")
+    new_password = getpass("New Password: ")
     modified = modify_password(old_password, new_password, username)
     if modified:
         print("Password updated successfully!")
