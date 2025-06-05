@@ -62,7 +62,7 @@ def validate_phone_number_nl(phone_number):
         return False
     
 def validate_driver_license_number(license_number):
-    license_number_re = r'^[A-Z]{2}\d{6}$'
+    license_number_re = r'^([A-Z]{2}\d{6,7}|[A-Z]{1}\d{7,8})$'
     if re.match(license_number_re, license_number):
         return True
     else:
