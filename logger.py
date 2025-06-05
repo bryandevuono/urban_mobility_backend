@@ -1,105 +1,47 @@
-import logging
-from logging.handlers import TimedRotatingFileHandler
-import os
-from datetime import datetime
-from safe_data import *
-import main
-import ast
+import sqlite3
 
-#from log_config import logmanager as log_manager
-#log_instance = log_manager()
-#log_instance.log_activity(f"{username}", "System", "Invalid input in the main menu", "No")
+def create_logging_table(db_path='logging.db'):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS logging (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT NOT NULL,
+            time TEXT NOT NULL,
+            username TEXT NOT NULL,
+            description TEXT NOT NULL,
+            suspicious INTEGER NOT NULL CHECK (suspicious IN (0, 1))
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-class logmanager:
-    unread_suspicious_count = 0
+def log_event(username, description, suspicious, db_path='logging.db'):
+    from datetime import datetime
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    now = datetime.now()
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%H:%M:%S")
+    
+    cursor.execute('''
+        INSERT INTO logging (date, time, username, description, suspicious)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (date_str, time_str, username, description, suspicious))
+    
+    conn.commit()
+    conn.close()
 
-    def __init__(self, log_dir="logs", log_file="mealmanagement.log"):
-        self.log_dir = log_dir
-        self.log_file_path = os.path.join(log_dir, log_file)
-        self.unread_suspicious_count = 0 # Track of suspicious activity
-        
-        # Ensure the directory exists.
-        if not os.path.exists(self.log_dir):
-            os.makedirs(self.log_dir)
+def read_logs(db_path='../logging.db') -> None:
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM logging')
+    logs = cursor.fetchall()
+    conn.close()
+    print("Logging Records:")
+    for log in logs:
+        print(f"ID: {log[0]}, Date: {log[1]}, Time: {log[2]}, Username: {log[3]}, Description: {log[4]}, Suspicious: {'Yes' if log[5] else 'No'}")
 
-        # Create a logger
-        self.logger = logging.getLogger('meal_logger')
-        if not self.logger.hasHandlers():
-            self.logger.setLevel(logging.INFO)
-
-            # Create a TimedRotatingFileHandler
-            handler = TimedRotatingFileHandler(self.log_file_path, when='midnight', interval=1, backupCount=30)
-            handler.setLevel(logging.INFO)
-
-            # Create a formatter and set it for the handler
-            formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-
-            # Add the handler to the logger
-            self.logger.addHandler(handler)
-
-    # Function to log activities
-    def log_activity(self, username, description, additional_info=None, suspicious='No'):
-        log_entry = f"{username} - {description} - {additional_info or ''} - Suspicious: {suspicious}"
-        log_entry = encrypt_data(public_key(), log_entry)
-
-        if suspicious == 'Yes':
-            self.logger.warning(log_entry)
-            logmanager.unread_suspicious_count += 1
-        else:
-            self.logger.info(log_entry)
-
-    def show_notifications(self):
-        if logmanager.unread_suspicious_count > 0:
-            print(f"\n*** You have {logmanager.unread_suspicious_count} unread suspicious activity logs. ***\n")
-        else:
-            print("\nNo unread suspicious acitivities.\n")
-
-        
-    def see_logs(self, date=None):
-
-        file_path = self.log_file_path
-        if date:
-            file_path = f'{self.log_file_path}.{date}'
-
-        try:
-            with open(file_path, 'r') as file:
-                lines = file.readlines()
-                total_lines = len(lines)
-                pages = (total_lines + 19) // 20
-
-                page = 0
-                while True:
-                    main.clear()
-                    start_index = page * 20
-                    end_index = min((page + 1) * 20, total_lines)
-                    current_page_lines = lines[start_index:end_index]
-
-                    for line in current_page_lines:
-                        line = line.split(" - ")
-                        line[2] = ast.literal_eval(line[2])
-                        print(str(line[0]), "- ", end="")
-                        print(str(line[1]), "- ", end="")
-                        
-
-
-                    print(f"\n--- Page {page + 1} / {pages} ---\n")
-                    print("N. Next page")
-                    print("P. Previous page")
-                    print("B. Go back")
-                    choice = input("Choose an option (1/2/3): ").strip().lower()
-
-                    if choice == "n":
-                        if page < pages - 1:
-                            page += 1
-                    elif choice == "p":
-                        if page > 0:
-                            page -= 1
-                    elif choice == "b":
-                        logmanager.unread_suspicious_count = 0
-                        break
-                    else:
-                        print("Invalid input")
-                    
-        except FileNotFoundError:
-            print(f"The file {file_path} does not exist.")
+if __name__ == "__main__":
+    create_logging_table()
+    print("Logging table created (if not exists).")

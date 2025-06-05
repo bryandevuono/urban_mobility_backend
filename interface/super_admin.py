@@ -52,7 +52,7 @@ def menu():
             "6": change_profile_service_engineer,
             "7": delete_service_engineer,
             "8": reset_password_service_engineer,
-            "9": system_admin_menu,  # Placeholder for backend system logs
+            "9": see_logs,  # Placeholder for backend system logs
             "10": add_traveller,
             "11": change_traveller,
             "12": delete_traveller,

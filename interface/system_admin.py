@@ -3,6 +3,7 @@ from service_engineer import *
 import os
 import sys
 sys.path.insert(0, '../')
+from logger import read_logs
 from constants import *
 from getpass import getpass
 sys.path.insert(0, '../crud')
@@ -50,7 +51,7 @@ def menu(username):
             '6': change_profile_service_engineer,
             '7': delete_service_engineer,
             '8': lambda: reset_password_service_engineer(username),
-            '9': "",  # TODO: Implement view backend system logs
+            '9': see_logs,  # TODO: Implement view backend system logs
             '10': add_traveller,
             '11': change_traveller,
             '12': delete_traveller,
@@ -323,3 +324,7 @@ def backup_menu(role, username):
             break
         else:
             print("Invalid option. Please try again.")
+
+def see_logs():
+    clear()
+    read_logs()
