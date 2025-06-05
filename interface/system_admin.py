@@ -59,7 +59,6 @@ def menu(username):
             '14': update_scooter,
             '15': delete_scooter,
             '16': search_traveller,
-            'e': lambda: sys.exit(0)  # Exit option
         }
         choice = input("Enter your choice (1-17): ")
         if choice in options:
@@ -68,8 +67,7 @@ def menu(username):
         elif choice.lower() == '17':    
             backup_menu(SYSTEM_ADMIN, username)
         elif choice.lower() == 'e':
-            print("Exiting the system. Goodbye!")
-            sys.exit(0)
+            break
         else:
             print("Invalid choice. Please try again.")
 

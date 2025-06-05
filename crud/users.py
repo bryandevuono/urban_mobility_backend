@@ -86,23 +86,32 @@ def modify_password(old_password, password_input, username) -> bool:
     cursor = conn.cursor()
     # Validate the password before proceeding
     cursor.execute('''
-        SELECT password FROM users
-        WHERE username = ?
-    ''', (username,))
-    
-    result = cursor.fetchone()
+        SELECT username, password
+        FROM users
+    ''')
+    users = cursor.fetchall()
 
-    if check_password(old_password, result[0]):
+    username_db = ""
+    password_db = ""
+    for user in users:
+        if decrypt_message(user[0]) == username:
+            username_db = user[0]
+            password_db = user[1]
+
+    if check_password(old_password, password_db):
         pass
     else:
         print("Old password is incorrect.")
         return False
     
-    if not validate_password(password_input):
+    if validate_password(password_input):
+        pass
+    else:
+        print("Invalid password format.")
         return False
     
     # Check if the new password is the same as the old one
-    if old_password == password_input:
+    if password_db == old_password:
         print("The new password cannot be the same as the current password.")
         conn.close()
         return False
@@ -113,7 +122,7 @@ def modify_password(old_password, password_input, username) -> bool:
         UPDATE users
         SET password = ?
         WHERE username = ?
-    ''', (new_hashed_password, encrypt_message(username)))
+    ''', (new_hashed_password, username_db))
 
     conn.commit()
     conn.close()

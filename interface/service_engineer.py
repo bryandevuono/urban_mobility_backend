@@ -29,7 +29,6 @@ def menu(username):
         elif choice == '3':
             update_password(username)
         elif choice.lower() == 'e':
-            sys.exit(0)
             break
         else:
             print("Invalid choice. Please try again.")
