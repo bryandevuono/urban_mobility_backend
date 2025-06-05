@@ -71,49 +71,52 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
         print("\nScooter with this serial number does not exist.")
         return False
     
-    #validate inputs
-    validators = [
-        validate_brand(brand),
-        validate_model(model),
-        validate_top_speed(top_speed), 
-        validate_battery_capacity(battery_capacity),
-        validate_state_of_charge(soc),
-        validate_state_of_charge(target_range_soc),
-        validate_location(location), 
-        validate_out_of_service(out_of_service),
-        validate_mileage(mileage),
-        validate_last_maintenance_date(last_maintenance_date)
-    ]
-    
-    for validator in validators:
-        if validator:
-            pass
-        else:
-            return False
-        
-    cursor.execute('''
+    query = '''
         UPDATE scooter_data
-        SET brand = ?,
-            model = ?,
-            top_speed = ?,
-            battery_capacity = ?,
-            state_of_charge = ?,
-            target_range_soc = ?,
-            location = ?,
-            out_of_service = ?,
-            mileage = ?,
-            last_maintenance_date = ?
-        WHERE serial_number = ?
-    ''', (brand, model, float(top_speed), float(battery_capacity), int(soc), int(target_range_soc), float(location),
-          int(out_of_service), float(mileage), last_maintenance_date, serial_number))
-    
-    conn.commit()
+        SET
+    '''
+    params = []
+    if len(brand) > 0 and validate_brand(brand):
+        query += 'brand = ?, '
+        params.append(brand)
+    if len(model) > 0 and validate_model(model):
+        query += 'model = ?, '
+        params.append(model)
+    if len(top_speed) > 0 and validate_top_speed(top_speed):
+        query += 'top_speed = ?, '
+        params.append(float(top_speed))
+    if len(battery_capacity) > 0 and validate_battery_capacity(battery_capacity):
+        query += 'battery_capacity = ?, '
+        params.append(float(battery_capacity))
+    if len(soc) > 0 and validate_state_of_charge(soc):
+        query += 'state_of_charge = ?, '
+        params.append(int(soc))
+    if len(target_range_soc) > 0 and validate_state_of_charge(target_range_soc):
+        query += 'target_range_soc = ?, '
+        params.append(int(target_range_soc))
+    if len(location) > 0 and validate_location(location):
+        query += 'location = ?, '
+        params.append(float(location))
+    if len(out_of_service) > 0 and validate_out_of_service(out_of_service):
+        query += 'out_of_service = ?, '
+        params.append(int(out_of_service))
+    if len(mileage) > 0 and validate_mileage(mileage):
+        query += 'mileage = ?, '
+        params.append(float(mileage))
+    if len(last_maintenance_date) > 0 and validate_last_maintenance_date(last_maintenance_date):
+        query += 'last_maintenance_date = ? '
 
-    if cursor.rowcount == 0:
+    query += 'WHERE serial_number = ?'
+    cursor.execute(query, params + [serial_number])
+    conn.commit()
+    
+    if cursor.rowcount > 0:
+        conn.close()
+        return True
+    else:
+        print("\nNo changes were made to the scooter information. Some fields may not have been updated due to validation errors.")
         conn.close()
         return False
-    conn.close()
-    return True
 
 def delete_scooter_info(serial_number) -> bool:
 
