@@ -30,6 +30,8 @@ def welcome_screen():
 
 def login_screen():
     while True:
+        clear()
+        print("Please enter your username and password to log in.\n")
         username = input("Enter your username\n")
         password = input("Enter your password\n")
         authenticate_user(username, password)

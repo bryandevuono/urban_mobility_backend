@@ -21,33 +21,37 @@ def backup_database() -> bool:
     print(f"Backup created: {backup_filename}")
     return True
 
-def restore_database(backup_filename, restore_code) -> bool:
+def restore_database(backup_filename, restore_code, admin_username) -> bool:
     if len(backup_filename) > 0 and len(backup_filename) < 40:
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
         return False
-    #check if the restore_code is valid
-    conn = sqlite3.connect('../database/urban_mobility.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ?", (restore_code, False))
-
     backup_dir = "../database/backups"
     backup_path = os.path.join(backup_dir, backup_filename)
     if not os.path.isfile(backup_path):
         print("Backup file not found.")
         return False
+    #check if the restore_code is valid
+    conn = sqlite3.connect('../database/urban_mobility.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND username = ?", (restore_code, False, admin_username))
+    check_restore_code = cursor.rowcount > 0
+    if admin_username == "super_admin" or check_restore_code:
+        with zipfile.ZipFile(backup_path, 'r') as zipf:
+            zipf.extract('urban_mobility.db', path='../database')
 
-    with zipfile.ZipFile(backup_path, 'r') as zipf:
-        zipf.extract('urban_mobility.db', path='../database')
+        print(f"Backup {backup_filename} restored.")
+        #mark the restore code as used
+        cursor.execute("UPDATE backup_codes SET used = TRUE WHERE code = ?", (restore_code,))
+        conn.commit()
+        conn.close()
 
-    print(f"Backup {backup_filename} restored.")
-    #mark the restore code as used
-    cursor.execute("UPDATE backup_codes SET used = TRUE WHERE code = ?", (restore_code,))
-    conn.commit()
-    conn.close()
-    
-    return True
+        return True
+    else:
+        print("Invalid or already used restore code.")
+        conn.close()
+        return False
 
 def create_restore_code(admin_username) -> str:
     if len(admin_username) > 0 and len(admin_username) < 20:

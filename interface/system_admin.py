@@ -17,49 +17,51 @@ from backup import backup_database, restore_database, create_restore_code, revok
 clear = lambda: print('------------------------------------------------------------------------------\n')
 
 def menu(username):
-    clear()
-    print("Welcome to the Backend System, System Admin!")
-    print("1: Update the attributes of scooters in the system")
-    print("2: Search and retrieve the information of a scooter")
-    print("3: Update your password")
-    print("4: Check the list of users and their roles")
-    print("5: Add a new Service Engineer to the backend system")
-    print("6: Modify or update an existing Service Engineer account and profile")
-    print("7: Delete an existing Service Engineer account")
-    print("8: Reset an existing Service Engineer password (temporary password)")
-    print("9: View backend system logs")
-    print("10: Add a new Traveller to the backend system")
-    print("11: Update the information of a Traveller")
-    print("12: Delete a Traveller from the backend system")
-    print("13: Add a new scooter to the backend system")
-    print("14: Update the information of a scooter")
-    print("15: Delete a scooter from the backend system")
-    print("16: Search and retrieve the information of a Traveller")
-
-    options = {
-        '1': update_scooter_attr_admin,
-        '2': search_scooter,
-        '3': update_password,
-        '4': display_users,
-        '5': add_service_engineer,
-        '6': change_profile_service_engineer,
-        '7': delete_service_engineer,
-        '8': reset_password_service_engineer(username),
-        '9': "",  # TODO: Implement view backend system logs
-        '10': add_traveller,
-        '11': change_traveller,
-        '12': delete_traveller,
-        '13': add_scooter,
-        '14': update_scooter,
-        '15': delete_scooter,
-        '16': search_traveller,
-        'e': lambda: sys.exit(0)  # Exit option
-    }
     while True:
-        choice = input("Enter your choice (3-15): ")
+        clear()
+        print("Welcome to the Backend System, System Admin!")
+        print("1: Update the attributes of scooters in the system")
+        print("2: Search and retrieve the information of a scooter")
+        print("3: Update your password")
+        print("4: Check the list of users and their roles")
+        print("5: Add a new Service Engineer to the backend system")
+        print("6: Modify or update an existing Service Engineer account and profile")
+        print("7: Delete an existing Service Engineer account")
+        print("8: Reset an existing Service Engineer password (temporary password)")
+        print("9: View backend system logs")
+        print("10: Add a new Traveller to the backend system")
+        print("11: Update the information of a Traveller")
+        print("12: Delete a Traveller from the backend system")
+        print("13: Add a new scooter to the backend system")
+        print("14: Update the information of a scooter")
+        print("15: Delete a scooter from the backend system")
+        print("16: Search and retrieve the information of a Traveller")
+
+        options = {
+            '1': update_scooter_attr_admin,
+            '2': search_scooter,
+            '3': update_password,
+            '4': display_users,
+            '5': add_service_engineer,
+            '6': change_profile_service_engineer,
+            '7': delete_service_engineer,
+            '8': reset_password_service_engineer(username),
+            '9': "",  # TODO: Implement view backend system logs
+            '10': add_traveller,
+            '11': change_traveller,
+            '12': delete_traveller,
+            '13': add_scooter,
+            '14': update_scooter,
+            '15': delete_scooter,
+            '16': search_traveller,
+            'e': lambda: sys.exit(0)  # Exit option
+        }
+        choice = input("Enter your choice (1-17): ")
         if choice in options:
             clear()
             options[choice]()
+        elif choice.lower() == '17':    
+            backup_menu(SYSTEM_ADMIN, username)
         elif choice.lower() == 'e':
             print("Exiting the system. Goodbye!")
             sys.exit(0)
@@ -273,7 +275,7 @@ def update_scooter_attr_admin():
     else:
         print("Something went wrong while trying to update...")
 
-def backup_menu(role):
+def backup_menu(role, username):
     clear()
     while True:
         print("------------ Backup Menu ------------")
@@ -282,16 +284,19 @@ def backup_menu(role):
         if role == SUPER_ADMIN:
             print("3: Allow a specific System Administrator to restore a specific backup.")
             print("4: To revoke a previously generated restore-code for a System Administrator.")
-        
-        option = input("Please select an option (1-4): ")
+        print("E: Exit the backup menu")
+        option = input("Please select an option (1-4/E): ")
         if option == "1":
             backup_database()
         elif option == "2":
-            print("Enter the restore code:")
-            restore_code = input("Restore Code: ")
+            if role == 'system_admin':
+                print("Enter the restore code:")
+                restore_code = input("Restore Code: ")
+            else:
+                restore_code = None
             print("Enter the path to the backup file:")
             backup_filename = input("Backup Filename: ")
-            restored = restore_database(backup_filename, restore_code)
+            restored = restore_database(backup_filename, restore_code, username)
             if restored:
                 print("Database restored successfully!")
             else:
@@ -303,5 +308,8 @@ def backup_menu(role):
             print(f"restore_code: {restore_code}")
         elif option == "4" and  role == SUPER_ADMIN:
             revoke_restore_code()
+        elif option.lower() == "e":
+            print("Exiting the backup menu.")
+            break
         else:
             print("Invalid option. Please try again.")

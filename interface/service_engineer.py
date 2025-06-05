@@ -8,16 +8,16 @@ from users import modify_password
 clear = lambda: print('------------------------------------------------------------------------------\n')
 
 def menu(username):
-    # service_engineer
-    clear()
-    print("Welcome, service engineer!\n")
-    print("Please choose an option (number):")
-    print("1: Update the attributes of scooters in the system")
-    print("2: Search and retrieve the information of a scooter")
-    print("3: Update your password")
-    print("E: Exit")
-
     while True:
+        # service_engineer
+        clear()
+        print("Welcome, service engineer!\n")
+        print("Please choose an option (number):")
+        print("1: Update the attributes of scooters in the system")
+        print("2: Search and retrieve the information of a scooter")
+        print("3: Update your password")
+        print("E: Exit")
+
         choice = input("Enter your choice (1/2/3): ")
         if choice == '1':
             update_scooter_attr()
