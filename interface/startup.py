@@ -6,7 +6,7 @@ sys.path.insert(0, '../auth')
 from login import authenticate_user 
 sys.path.insert(0, '../')
 from logger import log_event
-clear = lambda: os.system('cls')
+clear = print("------------------------------------------------------------------------------\n")
 
 def welcome_screen():
     log_event("system", "User has entered the welcome screen", "0")

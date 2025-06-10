@@ -15,7 +15,6 @@ sys.path.insert(0, '../database')
 
 from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
 
-# clear = lambda: os.system('cls')
 clear = lambda: print('------------------------------------------------------------------------------\n')
 
 def menu(username):
@@ -43,7 +42,7 @@ def menu(username):
         print("------------------------------------------------------------------------------")
 
         options = {
-            '1': update_scooter_attr_admin,
+            '1': update_scooter_attr,
             '2': search_scooter,
             '3': lambda: update_password(username),
             '4': display_users,
@@ -56,7 +55,7 @@ def menu(username):
             '11': change_traveller,
             '12': delete_traveller,
             '13': add_scooter,
-            '14': update_scooter,
+            '14': update_scooter_attr_admin,
             '15': delete_scooter,
             '16': search_traveller,
         }
@@ -93,40 +92,6 @@ def add_scooter():
     else: 
         print("\nSomething went wrong while trying to add the scooter. Please check the input values.")
     
-def update_scooter():
-    clear()
-    print("Enter the scooter serial number to update:")
-    serial_number = input("Serial Number: ")
-    
-    brand = input("Brand (leave blank to keep current): ")
-    model = input("Model (leave blank to keep current): ")
-    top_speed = input("Top Speed (km/h, leave blank to keep current): ")
-    battery_capacity = input("Battery Capacity (mAh, leave blank to keep current): ")
-    soc = input("State of Charge (%), leave blank to keep current: ")
-    target_range_soc = input("Target Range SOC (%), leave blank to keep current: ")
-    location = input("Location, leave blank to keep current:")
-    out_of_service = input("Out of Service (0 for No, 1 for Yes, leave blank to keep current): ")
-    mileage = input("Mileage (km, leave blank to keep current): ")
-    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD, leave blank to keep current): ")
-
-    updated = update_scooter_info(serial_number, 
-                                brand, 
-                                model, 
-                                top_speed,
-                                battery_capacity,
-                                soc,
-                                target_range_soc,
-                                location,
-                                out_of_service,
-                                mileage,
-                                last_maintenance_date)
-    if updated:
-        print("Scooter updated successfully!")
-    else:
-        print("Scooter not found or update failed. Please check the serial number and input values.")
-        return
-    
-    print("Scooter updated successfully!")
 
 def delete_scooter():
     clear()
@@ -275,7 +240,7 @@ def update_scooter_attr_admin():
     # the data to update a scooter is limited for a service engineer
     clear()
     print("Enter scooter information to update:")
-    serial_number = input("Serial Number (Leave blank to keep current): ")
+    serial_number = input("Serial Number of the scooter to update: ")
     brand = input("Brand (Leave blank to keep current): ")
     model = input("Model: ")
     top_speed = input("Top Speed (km/h) (Leave blank to keep current): ")
@@ -286,9 +251,9 @@ def update_scooter_attr_admin():
     out_of_service = input("Out of Service (0/1) (Leave blank to keep current): ")
     mileage = input("Mileage (km) (Leave blank to keep current): ")
     last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD) (Leave blank to keep current): ")
-
+    new_serial_no = input("New Serial Number (Leave blank to keep current): ")
     updated = update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,state_of_charge,target_range_soc,
-                                location,out_of_service,mileage,last_maintenance_date)
+                                location,out_of_service,mileage,last_maintenance_date, new_serial_no)
     if updated:
         print("Scooter info updated!")
     else:
