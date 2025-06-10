@@ -9,7 +9,7 @@ import sqlite3
 sys.path.insert(0, '../encryption')
 from symmetric import encrypt_message, decrypt_message
 
-def authenticate_user(username_input, password):
+def authenticate_user(username_input, password) -> bool:
     #validate input (required, length format)
     if len(username_input) > 0 and len(password) > 0 and len(username_input) <= 12 and len(password) <= 30:
         pass

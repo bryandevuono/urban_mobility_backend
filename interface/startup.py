@@ -1,4 +1,3 @@
-import os
 import sys
 from super_admin import menu as super_admin_menu
 from getpass import getpass
@@ -6,7 +5,7 @@ sys.path.insert(0, '../auth')
 from login import authenticate_user 
 sys.path.insert(0, '../')
 from logger import log_event
-clear = print("------------------------------------------------------------------------------\n")
+clear = lambda: print("------------------------------------------------------------------------------\n")
 
 def welcome_screen():
     log_event("system", "User has entered the welcome screen", "0")
@@ -31,11 +30,28 @@ def welcome_screen():
             continue
 
 def login_screen():
+    login_counter = 0
+    log_event("system", "User has entered the login screen", "0")
     while True:
-        clear()
         print("Please enter your username and password to log in.\n")
         username = input("Enter your username\n")
         password = getpass("Enter your password (input is hidden)\n")
-        authenticate_user(username, password)
+        authenticated = authenticate_user(username, password)
+
+        if authenticated:
+            clear()
+            print("Login successful!")
+            log_event("system", f"User {username} has logged in successfully", "0")
+
+        else:
+            login_counter += 1
+            log_event("system", f"User {username} failed to log in", "1")
+            if login_counter >= 3:
+                clear()
+                log_event("system", "User has failed to log in 3 times", "1")
+                print("Too many failed attempts. Exiting the system.")
+                sys.exit(0)
+            else:
+                print(f"Login failed. You have {3 - login_counter} attempts left.")
 
 welcome_screen()
