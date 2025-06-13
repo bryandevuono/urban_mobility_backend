@@ -103,7 +103,7 @@ def modify_password(old_password, password_input, username) -> bool:
     if check_password(old_password, password_db):
         pass
     else:
-        print("Old password is incorrect.")
+        print("\nOld password is incorrect.")
         return False
     
     if validate_password(password_input):
@@ -114,7 +114,7 @@ def modify_password(old_password, password_input, username) -> bool:
     
     # Check if the new password is the same as the old one
     if password_db == old_password:
-        print("The new password cannot be the same as the current password.")
+        print("\nThe new password cannot be the same as the current password.")
         conn.close()
         return False
     
