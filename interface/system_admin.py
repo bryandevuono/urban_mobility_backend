@@ -119,17 +119,17 @@ def add_service_engineer():
     else:
         print("Failed to create Service Engineer. Please check the input data.")
 
-def display_users():
+def display_users(role):
     clear()
     print("Users:")
-    users = read_users()
+    users = read_users(role)
     print("id", "username", "firstname", "role", "lastname", "created_date")
     for user in users:
         print(user)
 
 def delete_service_engineer():
     clear()
-    display_users()
+    display_users(SYSTEM_ADMIN)
     print("Enter the user_id of the service engineer you want to delete (see overview):")
     id = input()
     deleted = delete_user(id, "service_engineer")
@@ -216,12 +216,12 @@ def change_traveller():
     
 def change_profile_service_engineer():
     clear()
-    display_users()
+    display_users(SYSTEM_ADMIN)
     print("Enter the user_id of the service engineer you want to modify (see overview):")
     id = input("Enter the ID:")
     firstname = input("New First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
-    username = input("New username of the service engineer to modify: ")
+    username = input("New username of the service engineer to modify (Leave blank to keep current): ")
     updated = update_profile(username, firstname, lastname, id, SERVICE_ENGINEER)
     if updated:
         print(f"Service Engineer updated successfully!")
@@ -230,7 +230,7 @@ def change_profile_service_engineer():
 
 def reset_password_service_engineer():
     clear()
-    display_users()
+    display_users(SYSTEM_ADMIN)
     print("Enter the user_id of the service engineer you want to reset (see overview):")
     id = input()    
     new_password = reset_password(id, SERVICE_ENGINEER)

@@ -57,7 +57,7 @@ def menu():
             "11": change_traveller,
             "12": delete_traveller,
             "13": add_scooter,
-            "14": update_scooter,
+            "14": update_scooter_attr_admin,
             "15": delete_scooter,
             "16": search_traveller,
             "17": add_system_admin,
@@ -93,7 +93,7 @@ def add_system_admin():
 
 def delete_system_admin():
     clear()
-    display_users()
+    display_users(SUPER_ADMIN)
     print("Enter the user_id of the service engineer you want to delete (see overview):")
     id = input("username:")
     deleted = delete_user(id, SYSTEM_ADMIN)
@@ -104,7 +104,7 @@ def delete_system_admin():
 
 def change_profile_system_admin():
     clear()
-    display_users()
+    display_users(SUPER_ADMIN)
     id = input("user to modify (ID):")
     print("Enter the info of the system admin you want to change:")
     username = input("username:")
@@ -118,7 +118,7 @@ def change_profile_system_admin():
 
 def reset_password_system_admin():
     clear()
-    display_users()
+    display_users(SUPER_ADMIN)
     print("Enter the ID of the admin whose password you want to reset:")
     id = input()    
     new_password = reset_password(id, SYSTEM_ADMIN)

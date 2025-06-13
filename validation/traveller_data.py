@@ -3,7 +3,7 @@ def validate_name(name):
     if len(name) > 0 and len(name) < 36 and name.isalpha():
         return True
     else:
-        print("Name must be between 1 and 35 characters long.")
+        print("Name must be between 1 and 35 characters long. Use only alphabetic characters.")
         return False
     
 def validate_gender(gender):

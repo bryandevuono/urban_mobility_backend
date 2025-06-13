@@ -97,44 +97,66 @@ def read_traveller(search_param) -> str:
 
 def update_traveller(email_to_search, email_address,first_name,last_name,birth_date,phone_number,gender,
                      streetname,house_number,zip_code,city,driving_license_number) -> bool:
-    validators = [
-        validate_name(first_name),
-        validate_name(last_name),
-        validate_gender(gender),
-        validate_name(streetname),
-        validate_birthday(birth_date),
-        validate_house_number(house_number),
-        validate_zip_code(zip_code),
-        validate_city(city),
-        validate_email(email_address),
-        validate_phone_number_nl(phone_number),
-        validate_driver_license_number(driving_license_number)
-    ]
-
-    for validator in validators:
-        if validator:
-            pass
-        else:
-            return False
+    if validate_email(email_to_search):
+        pass
+    else:
+        print("Invalid email address.")
+        return False
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-    cursor.execute('''
-        UPDATE travellers
-        SET email_address = ?,
-            first_name = ?, 
-            last_name = ?, 
-            birthday = ?,
-            gender = ?,
-            street_name = ?,
-            house_number = ?,
-            zip_code = ?,
-            city = ?,
-            mobile_phone = ?,
-            driving_license_number = ?
-        WHERE email_address = ?
-    ''', (email_address,first_name,last_name,birth_date,phone_number,gender,
-        streetname,house_number,zip_code,city,driving_license_number, email_to_search))
+    query = "UPDATE travellers SET "
+    params = []
+    if email_address and validate_email(email_address):
+        query += ", email_address = ?"
+        params.append(email_address)
+    if first_name and validate_name(first_name):
+        query += ", first_name = ?"
+        params.append(first_name)
+    if last_name and validate_name(last_name):
+        query += ", last_name = ? "
+        params.append(last_name)
+    if birth_date and validate_birthday(birth_date):
+        query += ", birthday = ?"
+        params.append(birth_date)
+    if phone_number and validate_phone_number_nl(phone_number):
+        query += ", mobile_phone = ?"
+        params.append(encrypt_message(phone_number))
+    if gender and validate_gender(gender):
+        query += ", gender = ?"
+        params.append(gender)
+    if streetname and validate_name(streetname):
+        query += ", street_name = ?"
+        params.append(encrypt_message(streetname))
+    if house_number and validate_house_number(house_number):
+        query += ", house_number = ?"
+        params.append(house_number)
+    if zip_code and validate_zip_code(zip_code):
+        query += ", zip_code = ?"
+        params.append(zip_code)
+    if city and validate_city(city):
+        query += ", city = ?"
+        params.append(city)
+    if driving_license_number and validate_driver_license_number(driving_license_number):
+        query += ", driving_license_number = ?"
+        params.append(driving_license_number)
+
+    if params:
+        pass
+    else:
+        print("No inputs provided for update.")
+        conn.close()
+        return False
+    
+    query = query.replace(", ", " ", 1)
+    query += " WHERE email_address = ?"
+    params.append(email_to_search)
+    cursor.execute(query, params)
     conn.commit()
-    updated = cursor.rowcount > 0
+
+    if cursor.rowcount == 0:
+        conn.close()
+        print("No traveller found with the specified email address.")
+        return False
     conn.close()
-    return updated
+    return True

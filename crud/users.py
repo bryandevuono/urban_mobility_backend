@@ -46,12 +46,14 @@ def create_user(username, password, firstname, lastname, role) -> bool:
 
     return True
 
-def read_users() -> list:
+def read_users(role) -> list:
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     query = '''
         SELECT id, username, first_name, role, last_name, register_date FROM users
     '''
+    if role == "system_admin":
+        query += " WHERE role = 'service_engineer'"
     cursor.execute(query)
     users = [list(row) for row in cursor.fetchall()]
     conn.close()
@@ -129,35 +131,53 @@ def modify_password(old_password, password_input, username) -> bool:
     return True
 
 def update_profile(username, firstname, lastname, id, role) -> bool:
-    # Validate the input data
-    validators = [
-        validate_username(username),
-        validate_name(firstname),
-        validate_name(lastname)
-    ]
-
-    for validator in validators:
-        if validator:
-            pass
-        else:
-            return False
-        
+    # Validate the inputs of selecting the user to update
+    if id and isinstance(id, str) and len(id) < 8:
+        pass
+    else:
+        print("Invalid Id.")
+        return False
+    
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
+    #check if the username exists by decrypting all usernames in the database
     cursor.execute('''
-        UPDATE users
-        SET username = ?,
-            first_name = ?,
-            last_name = ?
-        WHERE id = ?
-        AND role = ?
-    ''', (encrypt_message(username), firstname, lastname, int(id), role))
-    print("Updating profile for user with ID:", id)
-    # Check if the update was successful
-    if cursor.rowcount == 0:
-        print("No user found with the specified username/role.")
+        SELECT username
+        FROM users
+        WHERE id = ? AND role = ?
+    ''', (int(id), role))
+    user = cursor.fetchone()
+    if user:
+        pass
+    else:
+        print("No user found with the specified id and role.")
         conn.close()
         return False
+
+    query = "UPDATE users SET "
+    params = []
+    if len(firstname) > 0 and validate_name(firstname):
+        query += "first_name = ?, "
+        params.append(firstname)
+    if len(lastname) > 0 and validate_name(lastname):
+        query += "last_name = ?, "
+        params.append(lastname)
+    if len(username) > 0 and validate_username(username):
+        new_username = encrypt_message(new_username.lower())
+        query += "username = ?, "
+        params.append(new_username)
+
+    if params:
+        pass
+    else:
+        print("No inputs provided for update.")
+        conn.close()
+        return False
+    
+    query = query.rstrip(', ') + " WHERE id = ? AND role = ?"
+    params.append(int(id))
+    params.append(role)
+    cursor.execute(query, params)
     conn.commit()
     conn.close()
     return True

@@ -108,7 +108,6 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
     if new_serial_no and validate_serial_number(new_serial_no):
         query += ', serial_number = ? '
         params.append(new_serial_no)
-
     #check if any fields were given to update
     if len(params) == 0:
         print("\nNo fields were provided to update. Please provide at least one field to update.")
@@ -119,7 +118,6 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
     # add serial number to search the scooter
     params.append(serial_number)
     query += 'WHERE serial_number = ? '
-    print(f"\nExecuting query: {query} with params: {params}")
     cursor.execute(query, params)
     conn.commit()
     
