@@ -154,7 +154,7 @@ def read_scooter_info(search_param) -> list:
     if len(search_param) < 50:
         pass
     else:
-        print("Search parameter is too long. Please enter a shorter term.")
+        print("\nSearch parameter is too long. Please enter a shorter term.")
         return []
     
     conn = sqlite3.connect('../database/urban_mobility.db')
@@ -180,7 +180,9 @@ def read_scooter_info(search_param) -> list:
     
     conn.close()
     
-    if not scooters:
+    if scooters:
+        pass
+    else:
         return []
     
     return scooters

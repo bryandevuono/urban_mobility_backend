@@ -55,7 +55,11 @@ def search_scooter():
     print("Enter scooter information to search:")
     input_param = input("Search Parameter (Brand, Model, Serial Number, etc.): ")
     scooter_result = read_scooter_info(input_param)
-    print(scooter_result)
+    print("\n(id, brand, model, serial_no, top_speed, battery_capacity, state_of_charge, target_range, location, out of service (0/1), mileage):")
+    if scooter_result:
+        print(scooter_result)
+    else:
+        print("No scooters found matching the search criteria.")
     print("Search completed.")
 
 def update_password(username):
