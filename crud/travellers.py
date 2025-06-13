@@ -28,15 +28,18 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
             return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-
-    cursor.execute('''
-        INSERT INTO travellers (
-            first_name, last_name, birthday, gender, street_name, house_number, zip_code, city, email_address, mobile_phone, driving_license_number
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (firstname, lastname, birthday, gender, encrypt_message(streetname), house_number, zip_code, city, email_address, encrypt_message(mobile_phone), driving_license_number)
-        )
-
+    try:
+        cursor.execute('''
+            INSERT INTO travellers (
+                first_name, last_name, birthday, gender, street_name, house_number, zip_code, city, email_address, mobile_phone, driving_license_number
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (firstname, lastname, birthday, gender, encrypt_message(streetname), house_number, zip_code, city, email_address, encrypt_message(mobile_phone), driving_license_number)
+            )
+    except sqlite3.IntegrityError as e:
+        print(f"Error adding traveller, possibly due to duplicate email address, check your input")
+        conn.close()
+        return False
     conn.commit()
     conn.close()
 
@@ -144,7 +147,7 @@ def update_traveller(email_to_search, email_address,first_name,last_name,birth_d
     if params:
         pass
     else:
-        print("No inputs provided for update.")
+        print("\nNo inputs provided for update.")
         conn.close()
         return False
     

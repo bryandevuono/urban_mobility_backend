@@ -45,11 +45,11 @@ def menu(username):
             '1': update_scooter_attr,
             '2': search_scooter,
             '3': lambda: update_password(username),
-            '4': display_users,
+            '4': lambda: display_users(role=SYSTEM_ADMIN),
             '5': add_service_engineer,
             '6': change_profile_service_engineer,
             '7': delete_service_engineer,
-            '8': lambda: reset_password_service_engineer(username),
+            '8': reset_password_service_engineer,
             '9': see_logs,
             '10': add_traveller,
             '11': change_traveller,
@@ -134,9 +134,9 @@ def delete_service_engineer():
     id = input()
     deleted = delete_user(id, "service_engineer")
     if deleted:
-        print(f"Service Engineer deleted successfully.")
+        print(f"\nService Engineer deleted successfully.")
     else:
-        print(f"Service Engineer not found or deletion failed.")
+        print(f"\nService Engineer not found or deletion failed. Make sure the ID is valid and exists in the system.")
 
 def add_traveller():
     clear()
@@ -157,7 +157,7 @@ def add_traveller():
     if created:
         print("Traveller created successfully.")
     else:
-        print("Failed to create Traveller. Please check the input data and ensure all fields are valid.")
+        print("\nFailed to create Traveller. Please check the input data and ensure all fields are valid.")
 
 def delete_traveller():
     clear()
@@ -167,7 +167,7 @@ def delete_traveller():
     if removed:
         print(f"Traveller with email {email} deleted successfully.")
     else:
-        print(f"Traveller with email {email} not found or deletion failed.\n Check if the email is valid and exists in the system.")
+        print(f"Traveller with email {email} not found or deletion failed.\nCheck if the email is valid and exists in the system.")
 
 def search_traveller():
     clear()
@@ -219,14 +219,14 @@ def change_profile_service_engineer():
     display_users(SYSTEM_ADMIN)
     print("Enter the user_id of the service engineer you want to modify (see overview):")
     id = input("Enter the ID:")
-    firstname = input("New First Name (leave blank to keep current): ")
+    firstname = input("\nNew First Name (leave blank to keep current): ")
     lastname = input("New Last Name (leave blank to keep current): ")
     username = input("New username of the service engineer to modify (Leave blank to keep current): ")
     updated = update_profile(username, firstname, lastname, id, SERVICE_ENGINEER)
     if updated:
-        print(f"Service Engineer updated successfully!")
+        print(f"\nService Engineer updated successfully!")
     else:
-        print(f"Failed to update Service Engineer. Please check the input data and ensure the username is valid.")
+        print(f"\nFailed to update Service Engineer. Please check the input data and ensure the username is valid.")
 
 def reset_password_service_engineer():
     clear()

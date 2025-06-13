@@ -1,0 +1,5 @@
+-- database: ./logging.db
+
+-- 要運行整個文件，請按窗口右上角的▷按鈕。
+
+DELETE FROM logging

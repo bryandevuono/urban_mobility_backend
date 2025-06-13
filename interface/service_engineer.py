@@ -46,7 +46,7 @@ def update_scooter_attr():
     updated = update_scooter_info(serial_number=serial_no, brand="", model="", top_speed="",battery_capacity="",soc=state_of_charge,target_range_soc=target_range_soc,
                                 location=location,out_of_service=out_of_service,mileage=mileage,last_maintenance_date=last_maintenance_date, new_serial_no="")
     if updated:
-        print("Scooter info updated!")
+        print("\nScooter info updated!")
     else:
         print("Something went wrong while trying to update...")
         
@@ -64,7 +64,7 @@ def search_scooter():
 
 def update_password(username):
     clear()
-    print("Enter your old password:")
+    print("To update your password, please enter your old password and the new password you want to set:")
     old_password = getpass("Enter you old password:")
     print("Enter your new password:")
     new_password = getpass("New Password: ")

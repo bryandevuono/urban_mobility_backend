@@ -24,7 +24,6 @@ def log_event(username, description, suspicious, db_path='../logging.db'):
     now = datetime.now()
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M:%S")
-    
     cursor.execute('''
         INSERT INTO logging (date, time, username, description, suspicious)
         VALUES (?, ?, ?, ?, ?)
@@ -43,8 +42,6 @@ def read_logs(db_path='../logging.db') -> None:
     print("ID | Date | Time | Username | Description | Suspicious")
     log_counter = 0
     for log in logs:
-        print(f"ID: {log_counter}, Date: {decrypt_message(log[1])}, \
-              Time: {decrypt_message(log[2])}, Username: {decrypt_message(log[3])}, \
-              Description: {decrypt_message(log[4])}, Suspicious: {'Yes' if decrypt_message(log[5]) else 'No'}")
+        print(f"ID: {log[0]}, Date: {decrypt_message(log[1])},Time: {decrypt_message(log[2])}, Username: {decrypt_message(log[3])}, Description: {decrypt_message(log[4])}, Suspicious: {'Yes' if decrypt_message(log[5]) == "1" else 'No'}")
         log_counter += 1
     

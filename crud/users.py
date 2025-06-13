@@ -26,22 +26,29 @@ def create_user(username, password, firstname, lastname, role) -> bool:
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-    
+    # Check if the username already exists
+    cursor.execute('''
+        SELECT username FROM users
+    ''')
+
+    for row in cursor.fetchall():
+        if decrypt_message(row[0]) == username.lower():
+            print("\nUsername already exists.")
+            conn.close()
+            return False
+        
     username = username.lower()
     password = hash_password(password)
-    try:
-        cursor.execute('''
-            INSERT INTO users (
-                username, password, first_name, last_name, role, register_date
-            )
-            VALUES (?, ?, ?, ?, ?, ?)
-            ''', (encrypt_message(username), password, firstname, lastname, role, datetime.now())
-            )
+    cursor.execute('''
+        INSERT INTO users (
+            username, password, first_name, last_name, role, register_date
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        ''', (encrypt_message(username), password, firstname, lastname, role, datetime.now())
+        )
 
-        conn.commit()
+    conn.commit()
 
-    except sqlite3.IntegrityError as e:
-        print("Error: User with this username already exists.")
     conn.close()
 
     return True
@@ -77,11 +84,12 @@ def delete_user(id, role) -> bool:
         DELETE FROM users
         WHERE id = ? AND role = ?
     ''', ((int(id)), role))
-
     conn.commit()
     conn.close()
-
-    return True
+    if cursor.rowcount > 0:
+        return True
+    else:
+        return False
 
 def modify_password(old_password, password_input, username) -> bool:
     conn = sqlite3.connect('../database/urban_mobility.db')
@@ -170,7 +178,7 @@ def update_profile(username, firstname, lastname, id, role) -> bool:
     if params:
         pass
     else:
-        print("No inputs provided for update.")
+        print("\nNo inputs provided for update.")
         conn.close()
         return False
     
@@ -186,8 +194,8 @@ def reset_password(id, role) -> str:
     if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
-        print("Invalid Id.")
-        return False
+        print("\nInvalid Id.")
+        return ""
     
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
