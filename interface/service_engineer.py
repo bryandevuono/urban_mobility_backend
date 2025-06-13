@@ -22,10 +22,8 @@ def menu(username):
         choice = input("Enter your choice (1/2/3): ")
         if choice == '1':
             update_scooter_attr()
-            break
         elif choice == '2':
             search_scooter()
-            break
         elif choice == '3':
             update_password(username)
         elif choice.lower() == 'e':
@@ -37,15 +35,16 @@ def update_scooter_attr():
     # the data to update a scooter is limited for a service engineer
     clear()
     print("Enter scooter information to update:")
-    state_of_charge = input("State of Charge (%): ")
-    target_range_soc = input("Target Range at SOC (%): ")
-    location = input("Location: ")
-    out_of_service = input("Out of Service (0/1): ")
-    mileage = input("Mileage (km): ")
-    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD): ")
+    serial_no = input("Serial Number for the scooter to update: ")
+    state_of_charge = input("State of Charge (%) (Leave empty to keep it unchanged): ")
+    target_range_soc = input("Target Range at SOC (%) (Leave empty to keep it unchanged): ")
+    location = input("Location (Leave empty to keep it unchanged): ")
+    out_of_service = input("Out of Service (0/1) (Leave empty to keep it unchanged): ")
+    mileage = input("Mileage (km) (Leave empty to keep it unchanged): ")
+    last_maintenance_date = input("Last Maintenance Date (YYYY-MM-DD) (Leave empty to keep it unchanged): ")
 
-    updated = update_scooter_info(serial_number="", brand="", model="", top_speed="",battery_capacity="",state_of_charge=state_of_charge,target_range_soc=target_range_soc,
-                                location=location,out_of_service=out_of_service,mileage=mileage,last_maintenance_date=last_maintenance_date)
+    updated = update_scooter_info(serial_number=serial_no, brand="", model="", top_speed="",battery_capacity="",soc=state_of_charge,target_range_soc=target_range_soc,
+                                location=location,out_of_service=out_of_service,mileage=mileage,last_maintenance_date=last_maintenance_date, new_serial_no="")
     if updated:
         print("Scooter info updated!")
     else:

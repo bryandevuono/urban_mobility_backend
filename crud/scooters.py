@@ -110,7 +110,7 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
         params.append(new_serial_no)
     #check if any fields were given to update
     if len(params) == 0:
-        print("\nNo fields were provided to update. Please provide at least one field to update.")
+        print("\nNo valid fields were provided to update. Please provide at least one field to update.")
         conn.close()
         return False
     #remove first comma of query

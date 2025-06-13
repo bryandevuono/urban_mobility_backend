@@ -40,7 +40,6 @@ def login_screen():
 
         if authenticated:
             clear()
-            print("Login successful!")
             log_event("system", f"User {username} has logged in successfully", "0")
 
         else:

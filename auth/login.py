@@ -50,7 +50,7 @@ def authenticate_user(username_input, password) -> bool:
     
     # redirect to the correct menu based on role
     if authenticated and role == "service_engineer":
-        service_engineer.menu()
+        service_engineer.menu(username)
         return True
     elif authenticated and role == "system_admin":
         system_admin.menu(username)
