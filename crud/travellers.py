@@ -65,7 +65,7 @@ def remove_traveller(traveller_email) -> bool:
     else:
         return False
 
-def read_traveller(search_param) -> str:
+def read_traveller(search_param) -> None:
     #buffer overflow protection
     if len(search_param) > 60:
         return "Search term too long."
@@ -93,10 +93,17 @@ def read_traveller(search_param) -> str:
     
     conn.close()
     
-    if not travellers:
-        return "Traveller not found."
-    
-    return travellers
+    if travellers:
+        print("\nTraveller found:")
+        print("========================================")
+        for i, column in enumerate(cursor.description):
+            if column[0] == 'mobile_phone' or column[0] == 'street_name':
+                print(f"{column[0]}: {decrypt_message(travellers[i])}")
+            else:
+                print(f"{column[0]}: {travellers[i]}")
+    else:
+        print("No traveller found with the specified search term.")
+        return None
 
 def update_traveller(email_to_search, email_address,first_name,last_name,birth_date,phone_number,gender,
                      streetname,house_number,zip_code,city,driving_license_number) -> bool:

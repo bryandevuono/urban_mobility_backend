@@ -173,11 +173,7 @@ def search_traveller():
     clear()
     print("Enter the info of the traveller you want to search:")
     search_param = input()
-    traveller = read_traveller(search_param)
-    if traveller:
-        print("Result", traveller)
-    else:
-        print("Traveller not found.")
+    read_traveller(search_param)
 
 def change_traveller():
     clear()
