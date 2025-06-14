@@ -14,6 +14,7 @@ from travellers import create_traveller, update_traveller, read_traveller, remov
 sys.path.insert(0, '../database')
 
 from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
+import os
 
 clear = lambda: print('------------------------------------------------------------------------------\n')
 
@@ -275,7 +276,11 @@ def backup_menu(role, username):
             else:
                 restore_code = None
             print("Enter the path to the backup file:")
-            backup_filename = input("Backup Filename: ")
+            print("Available backups:")
+            backups = os.listdir('../database/backups')
+            for backup in backups:
+                print(backup)
+            backup_filename = input("Backup name: ") + ".zip"
             restored = restore_database(backup_filename, restore_code, username)
             if restored:
                 print("Database restored successfully!")

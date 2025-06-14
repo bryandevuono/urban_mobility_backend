@@ -18,7 +18,7 @@ def backup_database() -> bool:
     with zipfile.ZipFile(backup_zip_path, mode='w') as zf:
         zf.write(db_path, arcname=os.path.basename(db_path))
 
-    print(f"Backup created: {backup_filename}")
+    print(f"\nBackup created: {backup_filename}")
     return True
 
 def restore_database(backup_filename, restore_code, admin_username) -> bool:
