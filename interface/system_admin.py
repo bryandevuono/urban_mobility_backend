@@ -259,7 +259,7 @@ def update_scooter_attr_admin():
 def backup_menu(role, username):
     clear()
     while True:
-        print("------------ Backup Menu ------------")
+        print("\n------------ Backup Menu ------------")
         print("1: Create a backup of the database")
         print("2: Restore the database from a backup")
         if role == SUPER_ADMIN:

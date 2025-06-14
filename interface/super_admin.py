@@ -41,7 +41,7 @@ def menu():
         print("20: Reset an existing System Administrator password (temporary password)")
         print("21: Backup menu")
         print("E: Exit")
-        print("Please select an option (0-20):")
+        print("Please select an option (0-21):")
 
         options = {
             "1": update_scooter_attr_admin,

@@ -30,6 +30,18 @@ def restore_database(backup_filename, restore_code, admin_username) -> bool:
     else:
         print("Backup filename must be between 1 and 40 characters long.")
         return False
+    
+    if len(restore_code) < 50:
+        pass
+    else:
+        print("Restore code must be less than 50 characters long.")
+        return False
+    
+    if len(admin_username) > 0 and len(admin_username) < 20:
+        pass
+    else:
+        print("Username must be between 1 and 20 characters long.")
+        return False
     backup_dir = "../database/backups"
     backup_path = os.path.join(backup_dir, backup_filename)
     if not os.path.isfile(backup_path):
@@ -96,6 +108,11 @@ def create_restore_code(admin_username) -> str:
         return ""
 
 def revoke_restore_code(username) -> bool:
+    if len(username) > 0 and len(username) < 20:
+        pass
+    else:
+        print("Username must be between 1 and 20 characters long.")
+        return False
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
     
