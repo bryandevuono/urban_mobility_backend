@@ -2,6 +2,9 @@ import zipfile
 import os
 import sqlite3
 from datetime import datetime, timedelta
+import sys
+sys.path.insert(0, '../encryption')
+from symmetric import decrypt_message
 
 #TODO: duplicate codes for admins???
 
@@ -62,12 +65,21 @@ def create_restore_code(admin_username) -> str:
     #check if user exists and is an admin
     conn = sqlite3.connect('../database/urban_mobility.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT role FROM users WHERE username = ?", (admin_username,))
-    role = cursor.fetchone()
-    cursor.execute("SELECT * FROM backup_codes WHERE username = ?", (admin_username,))
+    cursor.execute("SELECT role, username FROM users")
+    # decrypt the usernames
+    users = cursor.fetchall()
+    username = ""
+    role = ""
+    for user in users:
+        print(user)
+        if decrypt_message(user[1]) == admin_username:
+            username = decrypt_message(user[1])
+            role = user[0]
+            break
      # check if the user already has a code
-    code_count = len(cursor.fetchall())
-    if role[0] == 'system_admin' and code_count == 0:
+    cursor.execute("SELECT COUNT(*) FROM backup_codes WHERE username = ? AND used = ?", (admin_username, False))
+    code_count = cursor.fetchone()[0]
+    if username and role == 'system_admin' and code_count == 0:
         #genetate a restore code
         restore_code = os.urandom(16).hex()
         expiration_date = datetime.now() + timedelta(days=1) 
@@ -79,7 +91,7 @@ def create_restore_code(admin_username) -> str:
         conn.close()
         return restore_code
     else:
-        print("User is not found or already has a code.")
+        print("\nUser is not found or already has a code.")
         conn.close()
         return ""
 

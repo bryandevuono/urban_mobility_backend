@@ -275,7 +275,8 @@ def backup_menu(role, username):
                 restore_code = input("Restore Code: ")
             else:
                 restore_code = None
-            print("Enter the path to the backup file:")
+            print("\nEnter the path to the backup file:")
+            print("----------------------------------")
             print("Available backups:")
             backups = os.listdir('../database/backups')
             for backup in backups:
