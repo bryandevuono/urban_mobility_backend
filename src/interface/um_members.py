@@ -1,5 +1,4 @@
 import sys
-from super_admin import menu as super_admin_menu
 from getpass import getpass
 sys.path.insert(0, '../auth')
 from login import authenticate_user 

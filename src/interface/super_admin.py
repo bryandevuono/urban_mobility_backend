@@ -47,7 +47,7 @@ def menu():
             "1": update_scooter_attr_admin,
             "2": search_scooter,
             # "3": update_password, # This is not implemented in the super admin menu
-            "4": display_users,
+            "4": lambda: display_users(SUPER_ADMIN),
             "5": add_service_engineer,
             "6": change_profile_service_engineer,
             "7": delete_service_engineer,
