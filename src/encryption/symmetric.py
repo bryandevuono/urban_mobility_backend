@@ -1,7 +1,7 @@
 import os
 from cryptography.fernet import Fernet
 
-key_file = "../encryption/secret.key"
+key_file = "./encryption/secret.key"
 
 def load_or_create_key():
     if not os.path.exists(key_file):

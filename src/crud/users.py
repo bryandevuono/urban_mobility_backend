@@ -3,11 +3,11 @@ from datetime import datetime
 import sys
 import string
 import random
-sys.path.insert(0, '../validation')
+sys.path.insert(0, './validation')
 from account_data import validate_username, validate_password, validate_name
-sys.path.insert(0, '../auth')
+sys.path.insert(0, './auth')
 from hash import hash_password, check_password
-sys.path.insert(0, '../encryption')
+sys.path.insert(0, './encryption')
 from symmetric import encrypt_message, decrypt_message
 
 def create_user(username, password, firstname, lastname, role) -> bool:

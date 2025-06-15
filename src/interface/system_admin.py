@@ -2,16 +2,16 @@ from service_engineer import menu as service_engineer_menu
 from service_engineer import *
 import os
 import sys
-sys.path.insert(0, '../')
+sys.path.insert(0, './')
 from logger import read_logs
 from constants import *
 from getpass import getpass
-sys.path.insert(0, '../crud')
+sys.path.insert(0, './crud')
 
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
 from users import create_user, delete_user, update_profile, reset_password, read_users
 from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
-sys.path.insert(0, '../database')
+sys.path.insert(0, './database')
 
 from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
 import os

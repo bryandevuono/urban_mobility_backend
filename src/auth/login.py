@@ -1,12 +1,12 @@
 from hash import *
 import sys
-sys.path.insert(0, '../interface')
+sys.path.insert(0, './interface')
 import service_engineer
 import system_admin
 import system_admin
 import super_admin
 import sqlite3
-sys.path.insert(0, '../encryption')
+sys.path.insert(0, './encryption')
 from symmetric import encrypt_message, decrypt_message
 
 def authenticate_user(username_input, password) -> bool:

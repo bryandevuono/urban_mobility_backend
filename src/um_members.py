@@ -1,8 +1,8 @@
 import sys
 from getpass import getpass
-sys.path.insert(0, '../auth')
+sys.path.insert(0, './auth')
 from login import authenticate_user 
-sys.path.insert(0, '../')
+sys.path.insert(0, './')
 from logger import log_event
 clear = lambda: print("------------------------------------------------------------------------------\n")
 

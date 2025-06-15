@@ -1,6 +1,6 @@
 import sqlite3
 import sys
-sys.path.insert(0, '../validation')
+sys.path.insert(0, './validation')
 from scooter_data import validate_brand, validate_model, validate_serial_number, \
     validate_top_speed, validate_battery_capacity, validate_state_of_charge, \
     validate_location, validate_out_of_service, validate_mileage, validate_last_maintenance_date

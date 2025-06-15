@@ -17,7 +17,7 @@ def create_logging_table(db_path='logging.db'):
     conn.commit()
     conn.close()
 
-def log_event(username, description, suspicious, db_path='../logging.db'):
+def log_event(username, description, suspicious, db_path='./logging.db'):
     from datetime import datetime
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -32,7 +32,7 @@ def log_event(username, description, suspicious, db_path='../logging.db'):
     conn.commit()
     conn.close()
 
-def read_logs(db_path='../logging.db') -> None:
+def read_logs(db_path='./logging.db') -> None:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM logging')
