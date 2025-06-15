@@ -1,8 +1,8 @@
 import sqlite3
 import sys
-sys.path.insert(0, '../validation')
+sys.path.insert(0, './validation')
 from traveller_data import validate_name, validate_gender, validate_birthday, validate_house_number, validate_zip_code, validate_city, validate_email, validate_phone_number_nl, validate_driver_license_number
-sys.path.insert(0, '../encryption')
+sys.path.insert(0, './encryption')
 from symmetric import encrypt_message, decrypt_message
 
 def create_traveller(firstname, lastname, birthday, gender, streetname, house_number, 
@@ -26,7 +26,7 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
             pass
         else:
             return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     try:
         cursor.execute('''
@@ -49,9 +49,9 @@ def remove_traveller(traveller_email) -> bool:
     if validate_email(traveller_email):
         pass
     else:
-        print("Invalid email address.")
+        print("\nInvalid email address.")
         return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -69,7 +69,7 @@ def read_traveller(search_param) -> None:
     #buffer overflow protection
     if len(search_param) > 60:
         return "Search term too long."
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     query = '''
@@ -110,10 +110,10 @@ def update_traveller(email_to_search, email_address,first_name,last_name,birth_d
     if validate_email(email_to_search):
         pass
     else:
-        print("Invalid email address.")
+        print("\nInvalid email address.")
         return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     query = "UPDATE travellers SET "
     params = []

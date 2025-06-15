@@ -24,7 +24,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
         else:
             return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     # Check if the username already exists
     cursor.execute('''
@@ -54,7 +54,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
     return True
 
 def read_users(role) -> list:
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     query = '''
         SELECT id, username, first_name, role, last_name, register_date FROM users
@@ -74,10 +74,10 @@ def delete_user(id, role) -> bool:
     if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
-        print("Invalid Id.")
+        print("\nInvalid Id.")
         return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     
     cursor.execute('''
@@ -92,7 +92,7 @@ def delete_user(id, role) -> bool:
         return False
 
 def modify_password(old_password, password_input, username) -> bool:
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     # Validate the password before proceeding
     cursor.execute('''
@@ -138,15 +138,15 @@ def modify_password(old_password, password_input, username) -> bool:
     conn.close()
     return True
 
-def update_profile(username, firstname, lastname, id, role) -> bool:
+def update_profile(new_username, firstname, lastname, id, role) -> bool:
     # Validate the inputs of selecting the user to update
     if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
-        print("Invalid Id.")
+        print("\nInvalid Id.")
         return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     #check if the username exists by decrypting all usernames in the database
     cursor.execute('''
@@ -170,7 +170,7 @@ def update_profile(username, firstname, lastname, id, role) -> bool:
     if len(lastname) > 0 and validate_name(lastname):
         query += "last_name = ?, "
         params.append(lastname)
-    if len(username) > 0 and validate_username(username):
+    if len(new_username) > 0 and validate_username(new_username):
         new_username = encrypt_message(new_username.lower())
         query += "username = ?, "
         params.append(new_username)
@@ -197,7 +197,7 @@ def reset_password(id, role) -> str:
         print("\nInvalid Id.")
         return ""
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     all_characters = string.ascii_letters + string.digits + string.punctuation

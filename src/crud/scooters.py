@@ -29,7 +29,7 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
         else:
             return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -58,7 +58,7 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
         print("\nInvalid serial number format. Please try again.")
         return False
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute('''
         SELECT * FROM scooter_data
@@ -135,7 +135,7 @@ def delete_scooter_info(serial_number) -> bool:
         pass
     else:
         return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -157,7 +157,7 @@ def read_scooter_info(search_param) -> list:
         print("\nSearch parameter is too long. Please enter a shorter term.")
         return []
     
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
 
     query = '''

@@ -3,14 +3,14 @@ import os
 import sqlite3
 from datetime import datetime, timedelta
 import sys
-sys.path.insert(0, '../encryption')
+sys.path.insert(0, './encryption')
 from symmetric import decrypt_message
 
 #TODO: duplicate codes for admins???
 
 def backup_database() -> bool:
-    db_path = "../database/urban_mobility.db"
-    backup_dir = "../database/backups"
+    db_path = "./database/urban_mobility.db"
+    backup_dir = "./database/backups"
 
     if not os.path.exists(backup_dir):
         os.makedirs(backup_dir)
@@ -24,14 +24,14 @@ def backup_database() -> bool:
     print(f"\nBackup created: {backup_filename}")
     return True
 
-def restore_database(backup_filename, restore_code, admin_username) -> bool:
+def restore_database(backup_filename, restore_code, admin_username, role) -> bool:
     if len(backup_filename) > 0 and len(backup_filename) < 40:
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
         return False
     
-    if len(restore_code) < 50:
+    if role == "super_admin" or len(restore_code) < 50:
         pass
     else:
         print("Restore code must be less than 50 characters long.")
@@ -42,12 +42,12 @@ def restore_database(backup_filename, restore_code, admin_username) -> bool:
     else:
         print("Username must be between 1 and 20 characters long.")
         return False
-    backup_dir = "../database/backups"
+    backup_dir = "./database/backups"
     backup_path = os.path.join(backup_dir, backup_filename)
     if not os.path.isfile(backup_path):
-        print("Backup file not found.")
+        print("\nBackup file not found.")
         return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND username = ? and expiration_date > DATETIME('now')", 
                    (restore_code, False, admin_username))
@@ -75,7 +75,7 @@ def create_restore_code(admin_username) -> str:
         print("Username must be between 1 and 20 characters long.")
         return ""
     #check if user exists and is an admin
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute("SELECT role, username FROM users")
     # decrypt the usernames
@@ -83,7 +83,6 @@ def create_restore_code(admin_username) -> str:
     username = ""
     role = ""
     for user in users:
-        print(user)
         if decrypt_message(user[1]) == admin_username:
             username = decrypt_message(user[1])
             role = user[0]
@@ -103,17 +102,17 @@ def create_restore_code(admin_username) -> str:
         conn.close()
         return restore_code
     else:
-        print("\nUser is not found or already has a code.")
+        print("\nUser is not found or already has a (used)code.")
         conn.close()
         return ""
 
 def revoke_restore_code(username) -> bool:
-    if len(username) > 0 and len(username) < 20:
+    if len(username) > 0 and len(username) < 11:
         pass
     else:
-        print("Username must be between 1 and 20 characters long.")
+        print("Username must be between 1 and 11 characters long.")
         return False
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     
     cursor.execute("SELECT * FROM backup_codes WHERE username = ?", (username,))

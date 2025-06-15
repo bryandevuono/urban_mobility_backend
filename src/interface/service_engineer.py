@@ -59,7 +59,7 @@ def search_scooter():
     if scooter_result:
         print(scooter_result)
     else:
-        print("No scooters found matching the search criteria.")
+        print("\nNo scooters found matching the search criteria.")
     print("Search completed.")
 
 def update_password(username):

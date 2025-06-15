@@ -101,8 +101,11 @@ def delete_scooter():
 
     confirmation = input(f"Are you sure you want to delete the scooter with Serial Number {serial_number}? (yes/no): ").strip().lower()
     if confirmation == 'yes':
-        delete_scooter_info(serial_number)
-        print("Scooter deleted successfully!")
+        deleted = delete_scooter_info(serial_number)
+        if deleted:
+            print("Scooter deleted successfully!")
+        else: 
+            print("Failed to delete the scooter. Please check if the Serial Number is correct and exists in the system.")
     else:
         print("Operation cancelled.")
 
@@ -118,7 +121,7 @@ def add_service_engineer():
     if created:
         print("Service Engineer created successfully.")
     else:
-        print("Failed to create Service Engineer. Please check the input data.")
+        print("\nFailed to create Service Engineer. Please check the input data.")
 
 def display_users(role):
     clear()
@@ -209,7 +212,7 @@ def change_traveller():
     if not updated:
         print("Traveller not found or update failed.")
         return
-    print("Traveller updated successfully!")
+    print("\nTraveller updated successfully!")
     
 def change_profile_service_engineer():
     clear()
@@ -278,11 +281,11 @@ def backup_menu(role, username):
             print("\nEnter the path to the backup file:")
             print("----------------------------------")
             print("Available backups:")
-            backups = os.listdir('../database/backups')
+            backups = os.listdir('./database/backups')
             for backup in backups:
                 print(backup)
             backup_filename = input("Backup name: ") + ".zip"
-            restored = restore_database(backup_filename, restore_code, username)
+            restored = restore_database(backup_filename, restore_code, username, role)
             if restored:
                 print("Database restored successfully!")
             else:

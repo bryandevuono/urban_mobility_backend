@@ -2,12 +2,12 @@ from service_engineer import menu as service_engineer_menu, search_scooter
 from system_admin import menu as system_admin_menu
 from system_admin import *
 import os
-sys.path.insert(0, '../')
+sys.path.insert(0, './')
 from constants import *
 import sys
-sys.path.insert(0, '../crud')
+sys.path.insert(0, './crud')
 from users import create_user, delete_user, update_profile, reset_password    
-sys.path.insert(0, '../database')
+sys.path.insert(0, './database')
 
 # clear = lambda: ('cls')
 clear = lambda: print('------------------------------------------------------------------------------\n')
@@ -19,7 +19,7 @@ def menu():
         print("Welcome to the Backend System, super admin!")
         print("1: Update the attributes of scooters in the system")
         print("2: Search and retrieve the information of a scooter")
-        print("3: Update your password")
+        print("3: Update your password (not implemented in super admin menu)")
         # system admin
         print("4: Check the list of users and their roles")
         print("5: Add a new Service Engineer to the backend system")
@@ -107,9 +107,9 @@ def change_profile_system_admin():
     display_users(SUPER_ADMIN)
     id = input("user to modify (ID):")
     print("Enter the info of the system admin you want to change:")
-    username = input("username:")
-    firstname = input("firstname:")
-    lastname = input("lastname:")
+    username = input("username (leave blank to keep the current field):")
+    firstname = input("firstname (leave blank to keep the current field):")
+    lastname = input("lastname (leave blank to keep the current field):")
     updated = update_profile(username, firstname, lastname, id, role=SYSTEM_ADMIN)
     if updated:
         print("Profile updated successfully.")

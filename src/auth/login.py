@@ -23,7 +23,7 @@ def authenticate_user(username_input, password) -> bool:
         return True
     
     #check if username exists and get password and role
-    conn = sqlite3.connect('../database/urban_mobility.db')
+    conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     cursor.execute('''
         SELECT username, id, password, role
