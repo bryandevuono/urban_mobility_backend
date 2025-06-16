@@ -12,6 +12,7 @@ from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, 
 from users import create_user, delete_user, update_profile, reset_password, read_users
 from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
 sys.path.insert(0, './database')
+from logout import logout_user
 
 from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
 import os
@@ -288,7 +289,10 @@ def backup_menu(role, username):
             backup_filename = input("Backup name: ") + ".zip"
             restored = restore_database(backup_filename, restore_code, username, role)
             if restored:
-                print("Database restored successfully!")
+                print("Database restored successfully!\n")
+                # log out user after restore
+                logout_user()
+                break
             else:
                 print("Failed to restore the database. Please check the restore code and backup file.")
         elif option == "3" and role == SUPER_ADMIN:

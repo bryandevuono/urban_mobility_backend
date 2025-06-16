@@ -25,7 +25,7 @@ def backup_database() -> bool:
     return True
 
 def restore_database(backup_filename, restore_code, admin_username, role) -> bool:
-    if len(backup_filename) > 0 and len(backup_filename) < 40:
+    if len(backup_filename) > 0 and len(backup_filename) <= 40:
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
@@ -84,7 +84,7 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         return False
 
 def create_restore_code(admin_username) -> str:
-    if len(admin_username) > 0 and len(admin_username) < 20:
+    if len(admin_username) > 0 and len(admin_username) < 11:
         pass
     else:
         print("Username must be between 1 and 20 characters long.")

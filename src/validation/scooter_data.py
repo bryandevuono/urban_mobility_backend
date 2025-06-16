@@ -74,7 +74,7 @@ def validate_last_maintenance_date(date):
         return False
     
 def validate_search_parameter(input_param):
-    if len(input_param) < max_input_length and len(input_param) > 0:
+    if len(input_param) < max_input_length and len(input_param) > 0 and input_param.isalnum():
         return True
     else:
         print("\nInvalid search parameter. It should be less than 50 characters.")

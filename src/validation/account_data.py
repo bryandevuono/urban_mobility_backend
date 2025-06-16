@@ -17,7 +17,7 @@ def validate_username(username) -> bool:
         return False
     
 def validate_name(name):
-    if len(name) > 0 and len(name) < 36 and name.isalpha():
+    if len(name) > 0 and len(name) < 36 and name.isalpha(): #isalpha() automatically checks for null-bytes, checking for \x00 would be blacklistin here
         return True
     else:
         print("\nName must be between 1 and 35 characters long. Use only alphabetic characters.")
