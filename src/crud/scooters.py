@@ -1,6 +1,7 @@
 import sqlite3
 import sys
 sys.path.insert(0, './validation')
+from logger import log_event
 from scooter_data import validate_brand, validate_model, validate_serial_number, \
     validate_top_speed, validate_battery_capacity, validate_state_of_charge, \
     validate_location, validate_out_of_service, validate_mileage, validate_last_maintenance_date
@@ -27,6 +28,7 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
         if validator:
             pass
         else:
+            log_event(f"Failed to add scooter with serial number {serial_number}. Validation failed.", "1")
             return False
     
     conn = sqlite3.connect('./database/urban_mobility.db')
@@ -45,7 +47,7 @@ def add_scooter_info(brand, model, serial_number, top_speed, battery_capacity, s
 
     conn.commit()
     conn.close()
-
+    log_event(f"Scooter with serial number {serial_number} added successfully.", "0")
     return True
 
 
@@ -55,6 +57,7 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
     if validate_serial_number(serial_number):
         pass
     else:
+        log_event(f"Failed to update scooter with serial number {serial_number}. Invalid serial number format.", "1")
         print("\nInvalid serial number format. Please try again.")
         return False
     
@@ -123,10 +126,12 @@ def update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,
     
     if cursor.rowcount > 0:
         conn.close()
+        log_event(f"Scooter with serial number {serial_number} updated successfully.", "0")
         return True
     else:
         print("\nNo changes were made to the scooter information. Some fields may not have been updated due to validation errors.")
         conn.close()
+        log_event(f"Failed to update scooter with serial number {serial_number}. No changes made.", "1")
         return False
 
 def delete_scooter_info(serial_number) -> bool:
@@ -134,6 +139,7 @@ def delete_scooter_info(serial_number) -> bool:
     if validate_serial_number(serial_number):
         pass
     else:
+        log_event(f"Failed to delete scooter with serial number {serial_number}. Invalid serial number format.", "1")
         return False
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
@@ -148,12 +154,14 @@ def delete_scooter_info(serial_number) -> bool:
         conn.close()
         return False
     conn.close()
+    log_event(f"Scooter with serial number {serial_number} deleted successfully.", "0")
     return True
 
 def read_scooter_info(search_param) -> list:
     if len(search_param) < 50:
         pass
     else:
+        log_event(f"Search parameter '{search_param}' is too long.", "1")
         print("\nSearch parameter is too long. Please enter a shorter term.")
         return []
     
@@ -183,6 +191,7 @@ def read_scooter_info(search_param) -> list:
     if scooters:
         pass
     else:
+        log_event(f"No scooters found matching the search term '{search_param}'.", "0")
         return []
-    
+    log_event(f"Scooter search completed with {len(scooters)} results.", "0")
     return scooters

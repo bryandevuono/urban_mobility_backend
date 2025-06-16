@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, './validation')
 from traveller_data import validate_name, validate_gender, validate_birthday, validate_house_number, validate_zip_code, validate_city, validate_email, validate_phone_number_nl, validate_driver_license_number
 sys.path.insert(0, './encryption')
+from logger import log_event
 from symmetric import encrypt_message, decrypt_message
 
 def create_traveller(firstname, lastname, birthday, gender, streetname, house_number, 
@@ -25,6 +26,7 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
         if validator:
             pass
         else:
+            log_event(f"Failed to add traveller {firstname} {lastname}. Validation failed.", "1")
             return False
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
@@ -42,6 +44,8 @@ def create_traveller(firstname, lastname, birthday, gender, streetname, house_nu
         return False
     conn.commit()
     conn.close()
+
+    log_event(f"Traveller {firstname} {lastname} added successfully.", "0")
 
     return True
 
@@ -61,8 +65,12 @@ def remove_traveller(traveller_email) -> bool:
     if cursor.rowcount > 0:
         conn.commit()
         conn.close()
+        log_event(f"Traveller with email {traveller_email} removed successfully.", "0")
         return True
     else:
+        conn.close()
+        print("No traveller found with the specified email address.")
+        log_event(f"Failed to remove traveller with email {traveller_email}. No matching record found.", "1")
         return False
 
 def read_traveller(search_param) -> None:
@@ -102,6 +110,7 @@ def read_traveller(search_param) -> None:
             else:
                 print(f"{column[0]}: {travellers[i]}")
     else:
+        log_event(f"No travellers found matching the search term '{search_param}'.", "0")
         print("No traveller found with the specified search term.")
         return None
 
@@ -110,6 +119,7 @@ def update_traveller(email_to_search, email_address,first_name,last_name,birth_d
     if validate_email(email_to_search):
         pass
     else:
+        log_event(f"Failed to update traveller with email {email_to_search}. Invalid email format.", "1")
         print("\nInvalid email address.")
         return False
     
@@ -154,6 +164,7 @@ def update_traveller(email_to_search, email_address,first_name,last_name,birth_d
     if params:
         pass
     else:
+        log_event(f"Failed to update traveller with email {email_to_search}. No valid inputs provided.", "1")
         print("\nNo inputs provided for update.")
         conn.close()
         return False
@@ -167,6 +178,8 @@ def update_traveller(email_to_search, email_address,first_name,last_name,birth_d
     if cursor.rowcount == 0:
         conn.close()
         print("No traveller found with the specified email address.")
+        log_event(f"Failed to update traveller with email {email_to_search}. No matching record found.", "1")
         return False
     conn.close()
+    log_event(f"Traveller with email {email_to_search} updated successfully.", "0")
     return True

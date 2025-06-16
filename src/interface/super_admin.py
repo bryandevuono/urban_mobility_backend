@@ -16,6 +16,7 @@ def menu():
     while True:
         #service engineer
         clear()
+        set_username(SUPER_ADMIN)
         print("Welcome to the Backend System, super admin!")
         print("1: Update the attributes of scooters in the system")
         print("2: Search and retrieve the information of a scooter")

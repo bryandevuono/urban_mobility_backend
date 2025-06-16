@@ -8,6 +8,7 @@ from account_data import validate_username, validate_password, validate_name
 sys.path.insert(0, './auth')
 from hash import hash_password, check_password
 sys.path.insert(0, './encryption')
+from logger import log_event
 from symmetric import encrypt_message, decrypt_message
 
 def create_user(username, password, firstname, lastname, role) -> bool:
@@ -22,6 +23,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
         if validator:
             pass
         else:
+            log_event(f"Failed to create user {username}. Validation failed.", "1")
             return False
     
     conn = sqlite3.connect('./database/urban_mobility.db')
@@ -35,6 +37,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
         if decrypt_message(row[0]) == username.lower():
             print("\nUsername already exists.")
             conn.close()
+            log_event(f"Failed to create user {username}. Username already exists.", "1")
             return False
         
     username = username.lower()
@@ -50,7 +53,7 @@ def create_user(username, password, firstname, lastname, role) -> bool:
     conn.commit()
 
     conn.close()
-
+    log_event(f"User {username} created successfully.", "0")
     return True
 
 def read_users(role) -> list:
@@ -67,6 +70,8 @@ def read_users(role) -> list:
     for user in users:
         # Decrypt the username
         user[1] = decrypt_message(user[1])
+
+    log_event(f"Read users with role {role} successfully.", "0")
     return users
 
 def delete_user(id, role) -> bool:
@@ -74,6 +79,7 @@ def delete_user(id, role) -> bool:
     if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
+        log_event(f"Failed to delete user with id {id}. Invalid id format.", "1")
         print("\nInvalid Id.")
         return False
     
@@ -87,8 +93,10 @@ def delete_user(id, role) -> bool:
     conn.commit()
     conn.close()
     if cursor.rowcount > 0:
+        log_event(f"User with id {id} deleted successfully.", "0")
         return True
     else:
+        log_event(f"Failed to delete user with id {id}. No user found with the specified id and role.", "1")
         return False
 
 def modify_password(old_password, password_input, username) -> bool:
@@ -112,18 +120,21 @@ def modify_password(old_password, password_input, username) -> bool:
         pass
     else:
         print("\nOld password is incorrect.")
+        log_event(f"Failed to modify password for user {username}. Old password is incorrect.", "1")
         return False
     
     if validate_password(password_input):
         pass
     else:
         print("Invalid password format.")
+        log_event(f"Failed to modify password for user {username}. Invalid password format.", "1")
         return False
     
     # Check if the new password is the same as the old one
     if password_db == old_password:
         print("\nThe new password cannot be the same as the current password.")
         conn.close()
+        log_event(f"Failed to modify password for user {username}. New password is the same as the current password.", "1")
         return False
     
     new_hashed_password = hash_password(password_input)
@@ -136,6 +147,7 @@ def modify_password(old_password, password_input, username) -> bool:
 
     conn.commit()
     conn.close()
+    log_event(f"Password for user {username} modified successfully.", "0")
     return True
 
 def update_profile(new_username, firstname, lastname, id, role) -> bool:
@@ -143,6 +155,7 @@ def update_profile(new_username, firstname, lastname, id, role) -> bool:
     if id and isinstance(id, str) and len(id) < 8:
         pass
     else:
+        log_event(f"Failed to update profile for user with id {id}. Invalid id format.", "1")
         print("\nInvalid Id.")
         return False
     
@@ -158,6 +171,7 @@ def update_profile(new_username, firstname, lastname, id, role) -> bool:
     if user:
         pass
     else:
+        log_event(f"Failed to update profile for user with id {id}. No user found with the specified id and role.", "1")
         print("No user found with the specified id and role.")
         conn.close()
         return False
@@ -180,6 +194,7 @@ def update_profile(new_username, firstname, lastname, id, role) -> bool:
     else:
         print("\nNo inputs provided for update.")
         conn.close()
+        log_event(f"Failed to update profile for user with id {id}. No valid inputs provided.", "1")
         return False
     
     query = query.rstrip(', ') + " WHERE id = ? AND role = ?"
@@ -188,6 +203,7 @@ def update_profile(new_username, firstname, lastname, id, role) -> bool:
     cursor.execute(query, params)
     conn.commit()
     conn.close()
+    log_event(f"Profile for user with id {id} updated successfully.", "0")
     return True
 
 def reset_password(id, role) -> str:
@@ -195,6 +211,7 @@ def reset_password(id, role) -> str:
         pass
     else:
         print("\nInvalid Id.")
+        log_event(f"Failed to reset password for user with id {id}. Invalid id format.", "1")
         return ""
     
     conn = sqlite3.connect('./database/urban_mobility.db')
@@ -219,7 +236,9 @@ def reset_password(id, role) -> str:
     if cursor.rowcount > 0:
         conn.commit()
         conn.close()
+        log_event(f"Password for user with id {id} reset successfully.", "0")
         return "This is your temporary password: " + generated_temp_password + "\nPlease change it after logging in."
     else:
+        log_event(f"Failed to reset password for user with id {id}. No user found with the specified id and role.", "1")
         conn.close()
         return "No user found with the specified username and role."

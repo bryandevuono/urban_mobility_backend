@@ -2,6 +2,7 @@ import os
 import sys
 from getpass import getpass
 sys.path.insert(0, './crud')
+from logger import log_event, set_username, get_username
 from scooters import update_scooter_info, read_scooter_info
 from users import modify_password
 
@@ -10,6 +11,7 @@ clear = lambda: print('---------------------------------------------------------
 
 def menu(username):
     while True:
+        set_username(username)
         # service_engineer
         clear()
         print("Welcome, service engineer!\n")

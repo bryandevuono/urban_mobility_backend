@@ -1,13 +1,13 @@
 import sys
 from getpass import getpass
 sys.path.insert(0, './auth')
+from logger import log_event
 from login import authenticate_user 
 sys.path.insert(0, './')
-from logger import log_event
 clear = lambda: print("------------------------------------------------------------------------------\n")
 
 def welcome_screen():
-    log_event("system", "User has entered the welcome screen", "0")
+    log_event("User has entered the welcome screen", "0")
     while True:
         print("Welcome to the urban mobility system\n"
            "Choose an option:\n"
@@ -30,7 +30,7 @@ def welcome_screen():
 
 def login_screen():
     login_counter = 0
-    log_event("system", "User has entered the login screen", "0")
+    log_event("User has entered the login screen", "0")
     while True:
         print("Please enter your username and password to log in.\n")
         username = input("Enter your username\n")
@@ -39,14 +39,14 @@ def login_screen():
 
         if authenticated:
             clear()
-            log_event("system", f"User {username} has logged in successfully", "0")
+            log_event(f"User {username} has logged in successfully", "0")
 
         else:
             login_counter += 1
-            log_event("system", f"User {username} failed to log in", "1")
+            log_event(f"User {username} failed to log in", "1")
             if login_counter >= 3:
                 clear()
-                log_event("system", "User has failed to log in 3 times", "1")
+                log_event("User has failed to log in 3 times", "1")
                 print("Too many failed attempts. Exiting the system.")
                 sys.exit(0)
             else:

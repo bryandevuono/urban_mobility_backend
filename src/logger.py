@@ -1,6 +1,7 @@
 import sqlite3
 from encryption.symmetric import encrypt_message, decrypt_message
 
+username = "unknown_user"
 def create_logging_table(db_path='logging.db'):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -17,7 +18,7 @@ def create_logging_table(db_path='logging.db'):
     conn.commit()
     conn.close()
 
-def log_event(username, description, suspicious, db_path='./logging.db'):
+def log_event(description, suspicious, db_path='./logging.db'):
     from datetime import datetime
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -27,7 +28,7 @@ def log_event(username, description, suspicious, db_path='./logging.db'):
     cursor.execute('''
         INSERT INTO logging (date, time, username, description, suspicious)
         VALUES (?, ?, ?, ?, ?)
-    ''', (encrypt_message(date_str), encrypt_message(time_str), encrypt_message(username), encrypt_message(description), encrypt_message(suspicious)))
+    ''', (encrypt_message(date_str), encrypt_message(time_str), encrypt_message(get_username()), encrypt_message(description), encrypt_message(suspicious)))
     
     conn.commit()
     conn.close()
@@ -45,3 +46,10 @@ def read_logs(db_path='./logging.db') -> None:
         print(f"ID: {log[0]}, Date: {decrypt_message(log[1])},Time: {decrypt_message(log[2])}, Username: {decrypt_message(log[3])}, Description: {decrypt_message(log[4])}, Suspicious: {'Yes' if decrypt_message(log[5]) == "1" else 'No'}")
         log_counter += 1
     
+def set_username(user):
+    global username
+    username = user
+
+def get_username() -> str:
+    global username
+    return username

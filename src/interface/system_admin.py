@@ -7,7 +7,7 @@ from logger import read_logs
 from constants import *
 from getpass import getpass
 sys.path.insert(0, './crud')
-
+from logger import log_event, set_username
 from scooters import add_scooter_info, update_scooter_info,delete_scooter_info, read_scooter_info
 from users import create_user, delete_user, update_profile, reset_password, read_users
 from travellers import create_traveller, update_traveller, read_traveller, remove_traveller
@@ -20,6 +20,7 @@ clear = lambda: print('---------------------------------------------------------
 
 def menu(username):
     while True:
+        set_username(username)
         clear()
         print("Welcome to the Backend System, System Admin!")
         print("1: Update the attributes of scooters in the system")
@@ -242,7 +243,7 @@ def update_scooter_attr_admin():
     print("Enter scooter information to update:")
     serial_number = input("Serial Number of the scooter to update: ")
     brand = input("Brand (Leave blank to keep current): ")
-    model = input("Model: ")
+    model = input("Model (Leave blank to keep current): ")
     top_speed = input("Top Speed (km/h) (Leave blank to keep current): ")
     battery_capacity = input("Battery Capacity (Wh) (Leave blank to keep current): ")
     state_of_charge = input("State of Charge (%) (Leave blank to keep current): ")
@@ -255,7 +256,7 @@ def update_scooter_attr_admin():
     updated = update_scooter_info(serial_number, brand, model, top_speed,battery_capacity,state_of_charge,target_range_soc,
                                 location,out_of_service,mileage,last_maintenance_date, new_serial_no)
     if updated:
-        print("Scooter info updated!")
+        print("\nScooter info updated!")
     else:
         print("Something went wrong while trying to update...")
 
