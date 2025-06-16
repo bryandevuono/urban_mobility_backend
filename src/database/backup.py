@@ -4,7 +4,8 @@ import sqlite3
 from datetime import datetime, timedelta
 import sys
 sys.path.insert(0, './encryption')
-from symmetric import decrypt_message
+from logger import log_event
+from symmetric import encrypt_message, decrypt_message
 
 def backup_database() -> bool:
     db_path = "./database/urban_mobility.db"
@@ -20,6 +21,7 @@ def backup_database() -> bool:
         zf.write(db_path, arcname=os.path.basename(db_path))
 
     print(f"\nBackup created: {backup_filename}")
+    log_event(f"Backup created: {backup_filename}", "0")
     return True
 
 def restore_database(backup_filename, restore_code, admin_username, role) -> bool:
@@ -27,19 +29,23 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
+        log_event("Backup filename is invalid", "1")
         return False
     
     if role == "super_admin" or len(restore_code) < 50:
         pass
     else:
         print("Restore code must be less than 50 characters long.")
+        log_event("Restore code is invalid", "1")
         return False
     
     if len(admin_username) > 0 and len(admin_username) < 20:
         pass
     else:
+        log_event("Admin username is invalid (restoring backup)", "1")
         print("Username must be between 1 and 20 characters long.")
         return False
+    
     backup_dir = "./database/backups"
     backup_path = os.path.join(backup_dir, backup_filename)
     if not os.path.isfile(backup_path):
@@ -47,9 +53,19 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         return False
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND username = ? and expiration_date > DATETIME('now')", 
-                   (restore_code, False, admin_username))
+    # check if the user is connected (decrypt the username)
+    cursor.execute("SELECT username, id FROM backup_codes")
+    users = cursor.fetchall()
+    id_username = None
+    for user in users:
+        if decrypt_message(user[0]) == admin_username:
+            id_username = user[1]
+            break
+    cursor.execute("SELECT * FROM backup_codes WHERE code = ? AND used = ? AND id = ? and expiration_date > DATETIME('now')", 
+                   (restore_code, False, id_username))
+    
     check_restore_code = cursor.fetchone()
+
     if admin_username == "super_admin" or check_restore_code:
         with zipfile.ZipFile(backup_path, 'r') as zipf:
             zipf.extract('urban_mobility.db', path='../database')
@@ -64,6 +80,7 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
     else:
         print("Invalid or already used restore code.")
         conn.close()
+        log_event("Invalid or already used restore code", "1")
         return False
 
 def create_restore_code(admin_username) -> str:
@@ -94,13 +111,14 @@ def create_restore_code(admin_username) -> str:
         expiration_date = datetime.now() + timedelta(days=1) 
         #place it in the database
         cursor.execute("INSERT INTO backup_codes (code, username, used, expiration_date, created_at) VALUES (?, ?, ?, ?, ?)", 
-                       (restore_code, admin_username, False, expiration_date, datetime.now()))
+                       (restore_code, encrypt_message(admin_username), False, expiration_date, datetime.now()))
         #display the restore code
         conn.commit()
         conn.close()
         return restore_code
     else:
         print("\nUser is not found or already has a (used)code.")
+        log_event("User is not found or already has a (used) code", "1")
         conn.close()
         return ""
 
@@ -113,11 +131,15 @@ def revoke_restore_code(username) -> bool:
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     
-    cursor.execute("SELECT * FROM backup_codes WHERE username = ?", (username,))
-    result = cursor.fetchone()
+    cursor.execute("SELECT username, id FROM backup_codes")
+    users = cursor.fetchall()
+    for user in users:
+        if decrypt_message(user[0]) == username:
+            id = user[1]
+            break
     
-    if result:
-        cursor.execute("UPDATE backup_codes SET used = TRUE WHERE username = ?", (username,))
+    if id:
+        cursor.execute("UPDATE backup_codes SET used = TRUE WHERE id = ?", (id,))
         conn.commit()
         print("Restore code revoked successfully.")
         return True

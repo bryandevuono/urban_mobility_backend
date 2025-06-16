@@ -65,5 +65,5 @@ def authenticate_user(username_input, password) -> bool:
         return True
     else:
         log_event(f"User {username} failed to log in due to incorrect password", "1")
-        print("Incorrect password.")
+        print("Incorrect password or username.")
         return False

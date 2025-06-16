@@ -270,7 +270,7 @@ def backup_menu(role, username):
             print("3: Allow a specific System Administrator to restore a specific backup.")
             print("4: To revoke a previously generated restore-code for a System Administrator.")
         print("E: Exit the backup menu")
-        option = input("Please select an option (1-4/E): ")
+        option = input("Please select an option: ")
         if option == "1":
             backup_database()
         elif option == "2":
