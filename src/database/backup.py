@@ -6,8 +6,6 @@ import sys
 sys.path.insert(0, './encryption')
 from symmetric import decrypt_message
 
-#TODO: duplicate codes for admins???
-
 def backup_database() -> bool:
     db_path = "./database/urban_mobility.db"
     backup_dir = "./database/backups"
