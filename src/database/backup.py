@@ -89,7 +89,7 @@ def create_restore_code(admin_username) -> str:
     if len(admin_username) > 0 and len(admin_username) < 11:
         pass
     else:
-        print("Username must be between 1 and 20 characters long.")
+        print("Username must be between 1 and 12 characters long.")
         return ""
     #check if user exists and is an admin
     conn = sqlite3.connect('./database/urban_mobility.db')
@@ -147,4 +147,22 @@ def revoke_restore_code(username) -> bool:
         return True
     else:
         print("Restore code not found.")
+        return False
+    
+def validate_restore_code_input(restore_code: str) -> bool:
+    pattern = r"^[a-zA-Z0-9_.-]{1,50}$"
+    if re.match(pattern, restore_code):
+        return True
+    else:
+        print("Restore code must be less than 50 characters long.")
+        return False
+    
+def validate_backup_filename_input(backup_filename: str) -> bool:
+    #no special characters, only alphanumeric, underscore, dot and dash
+
+    pattern = r"^[a-zA-Z0-9_.-]{1,40}$"
+    if re.match(pattern, backup_filename):
+        return True
+    else:
+        print("Backup filename must be between 1 and 40 characters long.")
         return False
