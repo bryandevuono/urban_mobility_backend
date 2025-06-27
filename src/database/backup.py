@@ -26,8 +26,7 @@ def backup_database() -> bool:
     return True
 
 def restore_database(backup_filename, restore_code, admin_username, role) -> bool:
-    pattern = r"^[a-zA-Z0-9_.-]{1,40}$"
-    if len(backup_filename) > 0 and len(backup_filename) <= 40 and re.match(pattern, backup_filename):
+    if validate_backup_input(backup_filename):
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
@@ -41,11 +40,11 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         log_event("Restore code is invalid", "1")
         return False
     
-    if len(admin_username) > 0 and len(admin_username) < 20:
+    if len(admin_username) > 0 and len(admin_username) < 12:
         pass
     else:
         log_event("Admin username is invalid (restoring backup)", "1")
-        print("Username must be between 1 and 20 characters long.")
+        print("Username must be between 1 and 12 characters long.")
         return False
     
     backup_dir = "./database/backups"
@@ -86,7 +85,7 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         return False
 
 def create_restore_code(admin_username) -> str:
-    if len(admin_username) > 0 and len(admin_username) < 11:
+    if len(admin_username) > 0 and len(admin_username) < 12:
         pass
     else:
         print("Username must be between 1 and 12 characters long.")
@@ -128,7 +127,7 @@ def revoke_restore_code(username) -> bool:
     if len(username) > 0 and len(username) < 11:
         pass
     else:
-        print("Username must be between 1 and 11 characters long.")
+        print("Username must be between 1 and 12 characters long.")
         return False
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
@@ -149,19 +148,10 @@ def revoke_restore_code(username) -> bool:
         print("Restore code not found.")
         return False
     
-def validate_restore_code_input(restore_code: str) -> bool:
-    pattern = r"^[a-zA-Z0-9_.-]{1,50}$"
-    if re.match(pattern, restore_code):
-        return True
-    else:
-        print("Restore code must be less than 50 characters long.")
-        return False
-    
-def validate_backup_filename_input(backup_filename: str) -> bool:
-    #no special characters, only alphanumeric, underscore, dot and dash
-
+def validate_backup_input(backup_filename: str) -> bool:
+    #no special characters
     pattern = r"^[a-zA-Z0-9_.-]{1,40}$"
-    if re.match(pattern, backup_filename):
+    if re.match(pattern, backup_filename) and 1 <= len(backup_filename) <= 40:
         return True
     else:
         print("Backup filename must be between 1 and 40 characters long.")
