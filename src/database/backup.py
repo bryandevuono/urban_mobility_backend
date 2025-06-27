@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, './encryption')
 from logger import log_event
 from symmetric import encrypt_message, decrypt_message
+import re
 
 def backup_database() -> bool:
     db_path = "./database/urban_mobility.db"
@@ -25,7 +26,8 @@ def backup_database() -> bool:
     return True
 
 def restore_database(backup_filename, restore_code, admin_username, role) -> bool:
-    if len(backup_filename) > 0 and len(backup_filename) <= 40:
+    pattern = r"^[a-zA-Z0-9_.-]{1,40}$"
+    if len(backup_filename) > 0 and len(backup_filename) <= 40 and re.match(pattern, backup_filename):
         pass
     else:
         print("Backup filename must be between 1 and 40 characters long.")
@@ -108,7 +110,7 @@ def create_restore_code(admin_username) -> str:
     if username and role == 'system_admin' and code_count == 0:
         #genetate a restore code
         restore_code = os.urandom(16).hex()
-        expiration_date = datetime.now() + timedelta(days=1) 
+        expiration_date = datetime.now() + timedelta(days=1) # make the code valid for 1 day
         #place it in the database
         cursor.execute("INSERT INTO backup_codes (code, username, used, expiration_date, created_at) VALUES (?, ?, ?, ?, ?)", 
                        (restore_code, encrypt_message(admin_username), False, expiration_date, datetime.now()))

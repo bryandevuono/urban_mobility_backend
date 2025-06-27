@@ -16,6 +16,7 @@ from logout import logout_user
 
 from backup import backup_database, restore_database, create_restore_code, revoke_restore_code
 import os
+import re
 
 clear = lambda: print('------------------------------------------------------------------------------\n')
 
