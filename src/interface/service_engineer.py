@@ -5,6 +5,9 @@ sys.path.insert(0, './crud')
 from logger import log_event, set_username, get_username
 from scooters import update_scooter_info, read_scooter_info
 from users import modify_password
+sys.path.insert(0, './database')
+
+from logout import logout_user
 
 # clear = lambda: ('cls')
 clear = lambda: print('------------------------------------------------------------------------------\n')
@@ -73,5 +76,6 @@ def update_password(username):
     modified = modify_password(old_password, new_password, username)
     if modified:
         print("Password updated successfully!")
+        logout_user()
     else:
         print("Something went wrong while trying to update the password.")

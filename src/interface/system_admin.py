@@ -287,7 +287,7 @@ def backup_menu(role, username):
             backups = os.listdir('./database/backups')
             for backup in backups:
                 print(backup)
-            backup_filename = input("Backup name: ") + ".zip"
+            backup_filename = input("Backup name: ")
             restored = restore_database(backup_filename, restore_code, username, role)
             if restored:
                 print("Database restored successfully!\n")

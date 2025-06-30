@@ -7,6 +7,8 @@ sys.path.insert(0, './encryption')
 from logger import log_event
 from symmetric import encrypt_message, decrypt_message
 import re
+sys.path.insert(0, './validation')
+from account_data import validate_username
 
 def backup_database() -> bool:
     db_path = "./database/urban_mobility.db"
@@ -40,7 +42,7 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
         log_event("Restore code is invalid", "1")
         return False
     
-    if len(admin_username) > 0 and len(admin_username) < 12:
+    if validate_username(admin_username): 
         pass
     else:
         log_event("Admin username is invalid (restoring backup)", "1")
@@ -55,7 +57,7 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
     conn = sqlite3.connect('./database/urban_mobility.db')
     cursor = conn.cursor()
     # check if the user is connected (decrypt the username)
-    cursor.execute("SELECT username, id FROM backup_codes")
+    cursor.execute("SELECT username, id FROM backup_codes WHERE used = ?", (False,))
     users = cursor.fetchall()
     id_username = None
     for user in users:
@@ -66,10 +68,9 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
                    (restore_code, False, id_username))
     
     check_restore_code = cursor.fetchone()
-
     if admin_username == "super_admin" or check_restore_code:
         with zipfile.ZipFile(backup_path, 'r') as zipf:
-            zipf.extract('urban_mobility.db', path='../database')
+            zipf.extract('urban_mobility.db', path='./database')
 
         print(f"Backup {backup_filename} restored.")
         #mark the restore code as used
@@ -79,9 +80,10 @@ def restore_database(backup_filename, restore_code, admin_username, role) -> boo
 
         return True
     else:
-        print("Invalid or already used restore code.")
+        print("\nInvalid or already used restore code.")
         conn.close()
         log_event("Invalid or already used restore code", "1")
+        
         return False
 
 def create_restore_code(admin_username) -> str:
